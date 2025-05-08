@@ -39,7 +39,7 @@ Download and install from https://www.postgresql.org/download/windows/
 - Clone the repo down locally:
   `git clone`
 - Install dependencies:`npm i`
-- Create database: `npm run create-db`
-- Seed database: `npm run seed-db`
+- Create test database: `npm run create-test-db`
+- Seed test database: `npm run seed-test-db`
 
-### This project is currently in development so this README will update as the project progresses.  
+### This project is currently in development so this README will update as the project progresses.
