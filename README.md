@@ -10,7 +10,7 @@ A fullstack web application, it showcases all the skills I learned over the cour
 
 Make sure you have the following installed:
 
-- Node.js (v18.19.1 or higher)
+- Node.js (v23.11.0 or higher)
 
 - PostgreSQL
 
