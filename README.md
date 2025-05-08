@@ -39,6 +39,17 @@ Download and install from https://www.postgresql.org/download/windows/
 - Clone the repo down locally:
   `git clone`
 - Install dependencies:`npm i`
+
+## Working with Test Data
+- Create a file named ***.env.test*** in root directory
+- Provide relevant ENV's in file inn this format:
+  ```
+  PGDATABASE=airbnc_test
+  PGUSER=<psql-username>
+  PGPASSWORD=<user-password>
+  PGHOST=localhost
+  PGPORT=<preferred port, eg. 5432>
+  ```
 - Create test database: `npm run create-test-db`
 - Seed test database: `npm run seed-test-db`
 
