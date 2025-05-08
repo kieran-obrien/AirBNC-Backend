@@ -42,7 +42,7 @@ Download and install from https://www.postgresql.org/download/windows/
 
 ## Working with Test Data
 - Create a file named ***.env.test*** in root directory
-- Provide relevant ENV's in file inn this format:
+- Provide relevant ENV's in file with this format:
   ```
   PGDATABASE=airbnc_test
   PGUSER=<psql-username>
