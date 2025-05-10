@@ -28,11 +28,16 @@ describe("formatJSONdata", () => {
       Object.keys(testJSON[0]).length
     );
   });
-  test("should return expected values inside nested arrays (JSON objects values mapped in passed order)", () => {
+  test("should return expected values inside nested arrays (JSON objects values mapped in passed order) when not passed second columnOrder arg", () => {
     expect(formatJSONdata(testJSON)[0]).toEqual([
       "Apartment",
       "Description of Apartment.",
     ]);
+  });
+  test("should return expected values inside nested arrays when passed second columnOrder arg", () => {
+    expect(
+      formatJSONdata(testJSON, ["description", "property_type"])[0]
+    ).toEqual(["Description of Apartment.", "Apartment"]);
   });
   test("should not mutate original JSON data", () => {
     const copyOfTestData = [

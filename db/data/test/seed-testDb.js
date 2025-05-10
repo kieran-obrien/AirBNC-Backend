@@ -45,14 +45,19 @@ async function seedTestDatabase() {
     );
 
     const hostFormattedUsersData = formatHosts(usersData);
-    await testDb.query(
+    const { rows: insertedUsers } = await testDb.query(
       format(
         `INSERT INTO
         users(first_name, surname, email, phone_number, is_host, avatar)
-        VALUES %L`,
+        VALUES %L
+        RETURNING *`,
         formatJSONdata(hostFormattedUsersData)
       )
     );
+
+    
+    testDb.end();
+    console.log(insertedUsers);
   } catch (error) {
     console.log("Error seeding the database:", error);
   }
