@@ -21,6 +21,7 @@ const { propertiesSchema } = require("./schemas/properties-schema.js");
 
 // Utils
 const formatJSONdata = require("../utils/format-JSON-data.js");
+const formatHosts = require("../utils/format-hosts.js");
 
 async function seedTestDatabase() {
   try {
@@ -40,6 +41,16 @@ async function seedTestDatabase() {
       property_types(property_type, description)
       VALUES %L`,
         formatJSONdata(propertyTypesData)
+      )
+    );
+
+    const hostFormattedUsersData = formatHosts(usersData);
+    await testDb.query(
+      format(
+        `INSERT INTO
+        users(first_name, surname, email, phone_number, is_host, avatar)
+        VALUES %L`,
+        formatJSONdata(hostFormattedUsersData)
       )
     );
   } catch (error) {
