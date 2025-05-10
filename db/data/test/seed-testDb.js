@@ -23,6 +23,7 @@ const { propertiesSchema } = require("./schemas/properties-schema.js");
 const formatJSONdata = require("../utils/format-JSON-data.js");
 const formatHosts = require("../utils/format-hosts.js");
 const cleanPropertiesData = require("../utils/clean-properties-data.js");
+const cleanReviewsData = require("../utils/clean-reviews-data.js");
 
 async function seedTestDatabase() {
   try {
@@ -58,22 +59,24 @@ async function seedTestDatabase() {
       )
     );
 
-    // Properties
+    // Quick format insertedUsers
     for (const user of insertedUsers) {
       user.full_name = user.first_name + " " + user.surname;
       delete user.first_name;
       delete user.surname;
     }
+
+    // Properties
     const cleanedPropertiesData = cleanPropertiesData(
       propertiesData,
       insertedUsers
     );
-    await testDb.query(
+    const { rows: insertedProperties } = await testDb.query(
       format(
         `INSERT INTO
         properties(host_id, name, location, property_type, price_per_night, description)
         VALUES %L
-        RETURNING *`,
+        RETURNING property_id, name`,
         formatJSONdata(cleanedPropertiesData, [
           "host_id",
           "name",
@@ -86,6 +89,24 @@ async function seedTestDatabase() {
     );
 
     // Reviews
+    const cleanedReviewsData = cleanReviewsData(
+      reviewsData,
+      insertedUsers,
+      insertedProperties
+    );
+    await testDb.query(
+      format(
+        `INSERT INTO
+        reviews(property_id, guest_id, rating, comment)
+        VALUES %L`,
+        formatJSONdata(cleanedReviewsData, [
+          "property_id",
+          "guest_id",
+          "rating",
+          "comment",
+        ])
+      )
+    );
 
     testDb.end();
   } catch (error) {
