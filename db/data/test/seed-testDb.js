@@ -22,6 +22,7 @@ const { propertiesSchema } = require("./schemas/properties-schema.js");
 // Utils
 const formatJSONdata = require("../utils/format-JSON-data.js");
 const formatHosts = require("../utils/format-hosts.js");
+const cleanPropertiesData = require("../utils/clean-properties-data.js");
 
 async function seedTestDatabase() {
   try {
@@ -35,6 +36,7 @@ async function seedTestDatabase() {
     await testDb.query(reviewsSchema);
 
     // Seed tables
+    // Property_types
     await testDb.query(
       format(
         `INSERT INTO 
@@ -44,20 +46,48 @@ async function seedTestDatabase() {
       )
     );
 
+    // Users
     const hostFormattedUsersData = formatHosts(usersData);
     const { rows: insertedUsers } = await testDb.query(
       format(
         `INSERT INTO
         users(first_name, surname, email, phone_number, is_host, avatar)
         VALUES %L
-        RETURNING *`,
+        RETURNING user_id, first_name, surname`,
         formatJSONdata(hostFormattedUsersData)
       )
     );
 
-    
+    // Properties
+    for (const user of insertedUsers) {
+      user.full_name = user.first_name + " " + user.surname;
+      delete user.first_name;
+      delete user.surname;
+    }
+    const cleanedPropertiesData = cleanPropertiesData(
+      propertiesData,
+      insertedUsers
+    );
+    await testDb.query(
+      format(
+        `INSERT INTO
+        properties(host_id, name, location, property_type, price_per_night, description)
+        VALUES %L
+        RETURNING *`,
+        formatJSONdata(cleanedPropertiesData, [
+          "host_id",
+          "name",
+          "location",
+          "property_type",
+          "price_per_night",
+          "description",
+        ])
+      )
+    );
+
+    // Reviews
+
     testDb.end();
-    console.log(insertedUsers);
   } catch (error) {
     console.log("Error seeding the database:", error);
   }
