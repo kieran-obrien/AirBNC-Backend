@@ -6,7 +6,7 @@
   "type": "commonjs",
   "scripts": {
     "test": "jest --verbose",
-    "create-test-db": "psql -f ./db/data/test/create-test-db.sql",
+    "create-test-db": "psql -f ./db/data/test/create-testDb.sql",
     "seed-test-db": "node ./db/data/test/seed-testDb"
   },
   "repository": {
