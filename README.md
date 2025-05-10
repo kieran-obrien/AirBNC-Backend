@@ -10,7 +10,7 @@ A fullstack web application, it showcases all the skills I learned over the cour
 
 Make sure you have the following installed:
 
-- Node.js (v23.11.0 or higher)
+- Node.js (v22.15.0 or higher)
 
 - PostgreSQL
 
@@ -41,7 +41,8 @@ Download and install from https://www.postgresql.org/download/windows/
 - Install dependencies:`npm i`
 
 ## Working with Test Data
-- Create a file named ***.env.test*** in root directory
+
+- Create a file named **_.env.test_** in root directory
 - Provide relevant ENV's in file with this format:
   ```
   PGDATABASE=airbnc_test
