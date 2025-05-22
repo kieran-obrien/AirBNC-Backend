@@ -15,7 +15,6 @@ const cleanPropertiesData = require("./utils/clean-properties-data.js");
 const cleanReviewsData = require("./utils/clean-reviews-data.js");
 
 async function seedDatabase(data) {
-  // Database Data
   const {
     usersData,
     reviewsData,
@@ -111,7 +110,7 @@ async function seedDatabase(data) {
 
     // Images
 
-    db.end();
+    
   } catch (error) {
     console.log("Error seeding the database:", error);
   }
