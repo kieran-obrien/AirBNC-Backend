@@ -6,7 +6,7 @@
 
 A fullstack web application, it showcases all the skills I learned over the course of the bootcamp. It aims to recreate the experience of the popular property rental site [airbnb](https://www.airbnb.co.uk).
 
-As this is a showcase piece, instructions will be provided below on how to interact with both the ***test*** and ***dev*** data.
+As this is a showcase piece, instructions will be provided below on how to interact with both the **_test_** and **_dev_** data.
 
 ## ✅ Prerequisites
 
@@ -42,7 +42,7 @@ Download and install from https://www.postgresql.org/download/windows/
   `git clone`
 - Install dependencies:`npm i`
 
-## Working with Test Data
+## 🧑🏻‍🔬 Working with Test Data
 
 - Create a file named **_.env.test_** in root directory
 - Provide relevant ENV's in file with this format:
@@ -57,7 +57,7 @@ Download and install from https://www.postgresql.org/download/windows/
 - Run any test script from **_package.json_** with: `npm run <test_script_name>`
 - Test scripts will automatically seed the **_PGDATABASE_** referenced in .env.test
 
-## Working with Dev Data
+## 🧑🏻‍💻 Working with Dev Data
 
 - Create a file named **_.env.dev_** in root directory
 - Provide relevant ENV's in file with this format:
