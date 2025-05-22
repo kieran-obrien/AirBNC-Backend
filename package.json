@@ -5,9 +5,11 @@
   "main": "index.js",
   "type": "commonjs",
   "scripts": {
-    "test": "jest --verbose",
-    "create-test-db": "psql -f ./db/data/test/create-testDb.sql",
-    "seed-test-db": "node ./db/data/test/seed-testDb"
+    "test": "jest app --verbose",
+    "test-utils": "jest utils --verbose",
+    "create-test-db": "psql -f ./db/data/test/create-db.sql",
+    "create-dev-db": "psql -f ./db/data/dev/create-db.sql",
+    "seed-db": "node ./db/seed-run"
   },
   "repository": {
     "type": "git",
@@ -22,10 +24,13 @@
   "homepage": "https://github.com/kieran-obrien/AirBNC#readme",
   "devDependencies": {
     "jest": "^29.7.0",
-    "jest-extended": "^4.0.2"
+    "jest-extended": "^4.0.2",
+    "nodemon": "^3.1.10",
+    "supertest": "^7.1.1"
   },
   "dependencies": {
     "dotenv": "^16.5.0",
+    "express": "^5.1.0",
     "pg": "^8.15.6",
     "pg-format": "^1.0.4"
   },

@@ -1,44 +1,45 @@
-const testDb = require("./testDb-connection.js");
-
+const db = require("./connection.js");
 const format = require("pg-format");
 
-// Database Data
-const {
-  usersData,
-  reviewsData,
-  propertyTypesData,
-  propertiesData,
-  imagesData,
-  favouritesData,
-  bookingsData,
-} = require("./index.js");
-
 // Database Schemas
-const { propertyTypesSchema } = require("./schemas/property-types-schema");
-const { usersSchema } = require("./schemas/users-schema");
+const { propertyTypesSchema } = require("./schemas/property-types-schema.js");
+const { usersSchema } = require("./schemas/users-schema.js");
 const { reviewsSchema } = require("./schemas/reviews-schema.js");
 const { propertiesSchema } = require("./schemas/properties-schema.js");
+const { imagesSchema } = require("./schemas/images-schema.js");
 
 // Utils
-const formatJSONdata = require("../utils/format-JSON-data.js");
-const formatHosts = require("../utils/format-hosts.js");
-const cleanPropertiesData = require("../utils/clean-properties-data.js");
-const cleanReviewsData = require("../utils/clean-reviews-data.js");
+const formatJSONdata = require("./utils/format-JSON-data.js");
+const formatHosts = require("./utils/format-hosts.js");
+const cleanPropertiesData = require("./utils/clean-properties-data.js");
+const cleanReviewsData = require("./utils/clean-reviews-data.js");
 
-async function seedTestDatabase() {
+async function seedDatabase(data) {
+  // Database Data
+  const {
+    usersData,
+    reviewsData,
+    propertyTypesData,
+    propertiesData,
+    imagesData,
+    favouritesData,
+    bookingsData,
+  } = data;
+
   try {
     // Delete all tables
-    await testDb.query("DROP OWNED BY current_user;");
+    await db.query("DROP OWNED BY current_user;");
 
     // Add tables
-    await testDb.query(propertyTypesSchema);
-    await testDb.query(usersSchema);
-    await testDb.query(propertiesSchema);
-    await testDb.query(reviewsSchema);
+    await db.query(propertyTypesSchema);
+    await db.query(usersSchema);
+    await db.query(propertiesSchema);
+    await db.query(reviewsSchema);
+    await db.query(imagesSchema);
 
     // Seed tables
     // Property_types
-    await testDb.query(
+    await db.query(
       format(
         `INSERT INTO 
       property_types(property_type, description)
@@ -49,7 +50,7 @@ async function seedTestDatabase() {
 
     // Users
     const hostFormattedUsersData = formatHosts(usersData);
-    const { rows: insertedUsers } = await testDb.query(
+    const { rows: insertedUsers } = await db.query(
       format(
         `INSERT INTO
         users(first_name, surname, email, phone_number, is_host, avatar)
@@ -71,7 +72,7 @@ async function seedTestDatabase() {
       propertiesData,
       insertedUsers
     );
-    const { rows: insertedProperties } = await testDb.query(
+    const { rows: insertedProperties } = await db.query(
       format(
         `INSERT INTO
         properties(host_id, name, location, property_type, price_per_night, description)
@@ -94,7 +95,7 @@ async function seedTestDatabase() {
       insertedUsers,
       insertedProperties
     );
-    await testDb.query(
+    await db.query(
       format(
         `INSERT INTO
         reviews(property_id, guest_id, rating, comment)
@@ -108,10 +109,12 @@ async function seedTestDatabase() {
       )
     );
 
-    testDb.end();
+    // Images
+
+    db.end();
   } catch (error) {
     console.log("Error seeding the database:", error);
   }
 }
 
-seedTestDatabase();
+module.exports = seedDatabase;

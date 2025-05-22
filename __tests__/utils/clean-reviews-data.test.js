@@ -1,4 +1,4 @@
-const cleanReviewsData = require("../db/data/utils/clean-reviews-data");
+const cleanReviewsData = require("../../db/utils/clean-reviews-data");
 
 describe("cleanReviewsData", () => {
   const testInsertedUsers = [

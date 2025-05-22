@@ -1,4 +1,4 @@
-const formatHosts = require("../db/data/utils/format-hosts");
+const formatHosts = require("../../db/utils/format-hosts");
 
 describe("formatHosts", () => {
   const testUsersData = [

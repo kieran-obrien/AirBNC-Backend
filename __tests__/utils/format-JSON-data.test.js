@@ -1,4 +1,4 @@
-const formatJSONdata = require("../db/data/utils/format-JSON-data");
+const formatJSONdata = require("../../db/utils/format-JSON-data");
 
 describe("formatJSONdata", () => {
   const testJSON = [

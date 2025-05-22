@@ -1,4 +1,4 @@
-const cleanPropertiesData = require("../db/data/utils/clean-properties-data");
+const cleanPropertiesData = require("../../db/utils/clean-properties-data");
 
 describe("cleanPropertiesData", () => {
   const testInsertedUsers = [
