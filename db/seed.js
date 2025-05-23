@@ -26,8 +26,13 @@ async function seedDatabase(data) {
   } = data;
 
   try {
-    // Delete all tables
-    await db.query("DROP OWNED BY current_user;");
+    // Drop all tables
+    const { rows: tables } = await db.query(`
+  SELECT tablename FROM pg_tables WHERE schemaname = 'public';
+`);
+    for (const table of tables) {
+      await db.query(`DROP TABLE IF EXISTS "${table.tablename}" CASCADE;`);
+    }
 
     // Add tables
     await db.query(propertyTypesSchema);
@@ -109,8 +114,6 @@ async function seedDatabase(data) {
     );
 
     // Images
-
-    
   } catch (error) {
     console.log("Error seeding the database:", error);
   }
