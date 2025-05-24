@@ -5,3 +5,7 @@ exports.handlePathNotFound = (req, res, next) => {
 exports.handleBadRequest = (err, req, res, next) => {
   res.status(400).send({ msg: "Bad request." });
 };
+
+exports.handleCustomErrors = (err, req, res, next) => {
+  res.status(err.status).send({ msg: err.msg });
+};

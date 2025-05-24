@@ -15,7 +15,7 @@ afterAll(() => {
 
 describe("app", () => {
   test("non-existent endpoint responds with 404 and msg", async () => {
-    const { body } = await request(app).get("/non-existent-path").expect(404);
+    const { body } = await request(app).get("/").expect(404);
     expect(body.msg).toBe("Path not found.");
   });
 
@@ -81,7 +81,6 @@ describe("app", () => {
           const { body } = await request(app).get(
             "/api/properties?sort=popularity"
           );
-          console.log(body.properties);
           expect(body.properties).toBeSortedBy("popularity", {
             coerce: true,
             descending: true,
@@ -171,6 +170,64 @@ describe("app", () => {
             expect(Number(property.price_per_night)).toBeGreaterThanOrEqual(90);
           });
         });
+      });
+    });
+  });
+
+  describe("GET - /api/properties/:id/reviews", () => {
+    describe("status codes/errors", () => {
+      test("should return status 200 for good request", async () => {
+        await request(app).get("/api/properties/1/reviews").expect(200);
+      });
+
+      test(`returns with 404 and msg if path structure valid but id not in db`, async () => {
+        const { body } = await request(app)
+          .get("/api/properties/100/reviews")
+          .expect(404);
+
+        expect(body.msg).toBe("Data not found.");
+      });
+
+      //! NEED TO CLARIFY GLOBAL ERROR HANDLING WITH UPDATED EXPRESS
+      /*
+      test("should return status 400 for bad request", async () => {
+        const { body } = await request(app)
+          .get("/api/properties/1/rev")
+          .expect(400);
+        expect(body.msg).toBe("Path not found.");
+      });
+      */
+    });
+
+    describe("functionality", () => {
+      test(`returns with an array of review objects with keys 
+      - review_id, comment, rating, created_at, guest, guest_avatar`, async () => {
+        const validKeys = [
+          "review_id",
+          "comment",
+          "rating",
+          "created_at",
+          "guest",
+          "guest_avatar",
+        ];
+        const { body } = await request(app).get("/api/properties/3/reviews");
+
+        expect(body.reviews).toBeArray();
+
+        body.reviews.forEach((review) => {
+          expect(review).toContainAllKeys(validKeys);
+        });
+      });
+
+      // I want to test sorting by created_at here but seed is all created_at same time?
+
+      test(`returns with an avg_rating key, with correct avg`, async () => {
+        // I've chosen to round to 1 decimal place
+        const { body } = await request(app).get("/api/properties/3/reviews");
+
+        expect(body).toContainKey("average_rating");
+        // Test seed data has two reviews for this property, averaging 3.5
+        expect(body.average_rating).toBe(3.5);
       });
     });
   });

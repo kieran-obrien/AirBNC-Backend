@@ -6,7 +6,7 @@
   "type": "commonjs",
   "scripts": {
     "dev": "nodemon ./server/listen.js",
-    "test": "jest app --verbose",
+    "test": "clear; jest app --verbose",
     "test-utils": "jest utils --verbose",
     "create-test-db": "psql -f ./db/data/test/create-db.sql",
     "create-dev-db": "psql -f ./db/data/dev/create-db.sql",
