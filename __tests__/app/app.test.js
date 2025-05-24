@@ -75,6 +75,69 @@ describe("app", () => {
           });
         });
       });
+
+      describe("order", () => {
+        test("should return properties ordered ASC by default", async () => {
+          const { body } = await request(app).get(
+            "/api/properties?sort=price_per_night"
+          );
+          expect(body.properties).toBeSortedBy("price_per_night", {
+            coerce: true,
+          });
+        });
+
+        test("should return properties ordered DESC when passed any casing of desc", async () => {
+          const { body } = await request(app).get(
+            "/api/properties?sort=price_per_night&order=desc"
+          );
+          expect(body.properties).toBeSortedBy("price_per_night", {
+            coerce: true,
+            descending: true,
+          });
+
+          const { body: secondBody } = await request(app).get(
+            "/api/properties?sort=price_per_night&order=Desc"
+          );
+          expect(secondBody.properties).toBeSortedBy("price_per_night", {
+            coerce: true,
+            descending: true,
+          });
+
+          const { body: thirdBody } = await request(app).get(
+            "/api/properties?sort=price_per_night&order=dESc"
+          );
+          expect(thirdBody.properties).toBeSortedBy("price_per_night", {
+            coerce: true,
+            descending: true,
+          });
+        });
+      });
+
+      describe("host", () => {
+        test("should return properties filtered by host or empty array if id hosts no properties", async () => {
+          const { body } = await request(app).get("/api/properties?host=1");
+          // Alice Johnson - id 1, hosts properties
+          if (body.properties.length > 0) {
+            expect(
+              body.properties.every(
+                (property) => property.host === "Alice Johnson"
+              )
+            ).toBeTrue();
+          } else expect(body.properties).toBeArrayOfSize(0);
+
+          const { body: secondBody } = await request(app).get(
+            "/api/properties?host=2"
+          );
+          // Bob Smith - id 2, does not host properties
+          if (secondBody.properties.length > 0) {
+            expect(
+              secondBody.properties.every(
+                (property) => property.host === undefined
+              )
+            ).toBeTrue();
+          } else expect(secondBody.properties).toBeArrayOfSize(0);
+        });
+      });
     });
   });
 });

@@ -15,12 +15,15 @@ exports.selectProperties = async (
     ? order.toUpperCase()
     : "ASC";
 
+  const hostClause = Number.isNaN(Number(host)) ? "" : `AND host_id = ${host}`;
+
   const { rows: properties } = await db.query(
     `SELECT property_id, name AS property_name, 
     location, price_per_night, host_id, 
     first_name, surname FROM properties 
     JOIN users ON properties.host_id = users.user_id
     WHERE price_per_night BETWEEN $1 AND $2
+    ${hostClause}
     ORDER BY ${sortColumn} ${sortOrder};
  `,
     [minprice, maxprice]
