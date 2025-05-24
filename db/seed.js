@@ -64,18 +64,14 @@ async function seedDatabase(data) {
       )
     );
 
-    // Quick format insertedUsers
+    // Create Users Ref Object
+    const usersRef = {};
     for (const user of insertedUsers) {
-      user.full_name = user.first_name + " " + user.surname;
-      delete user.first_name;
-      delete user.surname;
+      usersRef[user.first_name + " " + user.surname] = user.user_id;
     }
 
     // Properties
-    const cleanedPropertiesData = cleanPropertiesData(
-      propertiesData,
-      insertedUsers
-    );
+    const cleanedPropertiesData = cleanPropertiesData(propertiesData, usersRef);
     const { rows: insertedProperties } = await db.query(
       format(
         `INSERT INTO
@@ -93,11 +89,17 @@ async function seedDatabase(data) {
       )
     );
 
+    // Create Properties Ref Object
+    const propertiesRef = {};
+    for (const property of insertedProperties) {
+      propertiesRef[property.name] = property.property_id;
+    }
+
     // Reviews
     const cleanedReviewsData = cleanReviewsData(
       reviewsData,
-      insertedUsers,
-      insertedProperties
+      usersRef,
+      propertiesRef
     );
     await db.query(
       format(

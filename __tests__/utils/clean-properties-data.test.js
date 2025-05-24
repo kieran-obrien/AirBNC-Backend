@@ -1,12 +1,7 @@
 const cleanPropertiesData = require("../../db/utils/clean-properties-data");
 
 describe("cleanPropertiesData", () => {
-  const testInsertedUsers = [
-    { user_id: 1, full_name: "Alice Johnson" },
-    { user_id: 2, full_name: "Bob Smith" },
-    { user_id: 3, full_name: "Emma Davis" },
-  ];
-
+  const testUserRef = { "Alice Johnson": 1, "Bob Smith": 2, "Emma Davis": 3 };
   const testPropertiesData = [
     {
       name: "Modern Apartment in City Center",
@@ -39,7 +34,7 @@ describe("cleanPropertiesData", () => {
 
   let returnedArray = [];
   beforeEach(() => {
-    returnedArray = cleanPropertiesData(testPropertiesData, testInsertedUsers);
+    returnedArray = cleanPropertiesData(testPropertiesData, testUserRef);
   });
 
   test("should return an array", () => {

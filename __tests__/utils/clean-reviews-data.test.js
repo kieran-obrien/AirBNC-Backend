@@ -1,20 +1,20 @@
 const cleanReviewsData = require("../../db/utils/clean-reviews-data");
 
 describe("cleanReviewsData", () => {
-  const testInsertedUsers = [
-    { user_id: 1, full_name: "Frank White" },
-    { user_id: 2, full_name: "Bob Smith" },
-    { user_id: 3, full_name: "Rachel Cummings" },
-  ];
+  const testUsersRef = {
+    "Frank White": 1,
+    "Bob Smith": 2,
+    "Rachel Cummings": 3,
+  };
 
-  const testInsertedProperties = [
-    { property_id: 1, name: "Modern Apartment in City Center" },
-    { property_id: 2, name: "Cosy Family House" },
-    { property_id: 3, name: "Chic Studio Near the Beach" },
-    { property_id: 4, name: "Elegant City Apartment" },
-    { property_id: 5, name: "Charming Studio Retreat" },
-    { property_id: 6, name: "Luxury Penthouse with View" },
-  ];
+  const testPropertiesRef = {
+    "Modern Apartment in City Center": 1,
+    "Cosy Family House": 2,
+    "Chic Studio Near the Beach": 3,
+    "Elegant City Apartment": 4,
+    "Charming Studio Retreat": 5,
+    "Luxury Penthouse with View": 6,
+  };
 
   const testReviewsData = [
     {
@@ -58,8 +58,8 @@ describe("cleanReviewsData", () => {
   beforeEach(() => {
     returnedArray = cleanReviewsData(
       testReviewsData,
-      testInsertedUsers,
-      testInsertedProperties
+      testUsersRef,
+      testPropertiesRef
     );
   });
 
