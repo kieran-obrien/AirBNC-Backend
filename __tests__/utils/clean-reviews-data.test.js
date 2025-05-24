@@ -83,7 +83,7 @@ describe("cleanReviewsData", () => {
       expect(elem).toContainKey("property_id");
     }
   });
-  test("guest_id keys should be mapped to corresponding values from passed users array", () => {
+  test("guest_id keys should be mapped to corresponding values from passed users ref obj", () => {
     // Test data should add 1, 2, 3, 1, 2
     expect(returnedArray[0].guest_id).toBe(1);
     expect(returnedArray[1].guest_id).toBe(2);
@@ -91,7 +91,7 @@ describe("cleanReviewsData", () => {
     expect(returnedArray[3].guest_id).toBe(1);
     expect(returnedArray[4].guest_id).toBe(2);
   });
-  test("property_id keys should be mapped to corresponding values from passed properties array", () => {
+  test("property_id keys should be mapped to corresponding values from passed properties ref obj", () => {
     // Test data should add 3, 1, 3, 1, 2
     expect(returnedArray[0].property_id).toBe(3);
     expect(returnedArray[1].property_id).toBe(1);

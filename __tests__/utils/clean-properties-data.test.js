@@ -55,7 +55,7 @@ describe("cleanPropertiesData", () => {
       expect(elem).toContainKey("host_id");
     }
   });
-  test("host_id keys should be mapped to corresponding values from passed users array", () => {
+  test("host_id keys should be mapped to corresponding values from passed users ref obj", () => {
     // Test data should add 1, 2, 1
     expect(returnedArray[0].host_id).toBe(1);
     expect(returnedArray[1].host_id).toBe(2);

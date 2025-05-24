@@ -7,12 +7,15 @@ const { usersSchema } = require("./schemas/users-schema.js");
 const { reviewsSchema } = require("./schemas/reviews-schema.js");
 const { propertiesSchema } = require("./schemas/properties-schema.js");
 const { imagesSchema } = require("./schemas/images-schema.js");
+const { favouritesSchema } = require("./schemas/favourites-schema.js");
 
 // Utils
 const formatJSONdata = require("./utils/format-JSON-data.js");
 const formatHosts = require("./utils/format-hosts.js");
+const formatImagesData = require("./utils/format-images.js");
 const cleanPropertiesData = require("./utils/clean-properties-data.js");
 const cleanReviewsData = require("./utils/clean-reviews-data.js");
+const formatFavsData = require("./utils/format-favs.js")
 
 async function seedDatabase(data) {
   const {
@@ -40,6 +43,7 @@ async function seedDatabase(data) {
     await db.query(propertiesSchema);
     await db.query(reviewsSchema);
     await db.query(imagesSchema);
+    await db.query(favouritesSchema);
 
     // Seed tables
     // Property_types
@@ -116,6 +120,34 @@ async function seedDatabase(data) {
     );
 
     // Images
+    const formattedImagesData = formatImagesData(imagesData, propertiesRef);
+    await db.query(
+      format(
+        `INSERT INTO
+        images(property_id, image_url, alt_text)
+        VALUES %L`,
+        formatJSONdata(formattedImagesData, [
+          "property_id",
+          "image_url",
+          "alt_text",
+        ])
+      )
+    );
+
+    // Favourites
+    const formattedFavsData = formatFavsData(
+      favouritesData,
+      usersRef,
+      propertiesRef
+    );
+    await db.query(
+      format(
+        `INSERT INTO
+        favourites(guest_id, property_id)
+        VALUES %L`,
+        formatJSONdata(formattedFavsData)
+      )
+    );
   } catch (error) {
     console.log("Error seeding the database:", error);
   }
