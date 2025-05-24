@@ -1,6 +1,17 @@
 const { selectProperties } = require("../models/properties.models");
 
 exports.getProperties = async (req, res, next) => {
-  const properties = await selectProperties();
-  res.status(200).send({ properties });
+  const { maxprice, minprice, sort, order, host } = req.query;
+  try {
+    const properties = await selectProperties(
+      maxprice,
+      minprice,
+      sort,
+      order,
+      host
+    );
+    res.status(200).send({ properties });
+  } catch (error) {
+    next(error);
+  }
 };

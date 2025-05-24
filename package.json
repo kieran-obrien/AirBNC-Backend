@@ -26,6 +26,7 @@
   "devDependencies": {
     "jest": "^29.7.0",
     "jest-extended": "^4.0.2",
+    "jest-sorted": "^1.0.15",
     "nodemon": "^3.1.10",
     "supertest": "^7.1.1"
   },
@@ -37,7 +38,8 @@
   },
   "jest": {
     "setupFilesAfterEnv": [
-      "jest-extended/all"
+      "jest-extended/all",
+      "jest-sorted"
     ]
   }
 }
