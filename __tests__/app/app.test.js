@@ -19,6 +19,7 @@ describe("app", () => {
     expect(body.msg).toBe("Path not found.");
   });
 
+  //! HOW TO HANDLE 400 AS BAD QUERIES ARE DEFAULTED
   describe("GET - /api/properties", () => {
     test("should return status 200", async () => {
       await request(app).get("/api/properties").expect(200);
@@ -31,6 +32,7 @@ describe("app", () => {
         "location",
         "price_per_night",
         "host",
+        "popularity", //! TO FIX
       ];
       const { body } = await request(app).get("/api/properties");
 
@@ -39,8 +41,6 @@ describe("app", () => {
         expect(property).toContainAllKeys(validKeys);
       });
     });
-
-    //! ADD DEFAULT FAV SORTING TEST WHEN FAV SEED FUNC DONE
 
     describe("Queries", () => {
       describe("maxprice", () => {
@@ -66,49 +66,68 @@ describe("app", () => {
       });
 
       describe("sort", () => {
-        test("should return properties sorted by price_per_night", async () => {
+        test("should return properties sorted by price_per_night when passed as query", async () => {
           const { body } = await request(app).get(
             "/api/properties?sort=price_per_night"
           );
           expect(body.properties).toBeSortedBy("price_per_night", {
             coerce: true,
-          });
-        });
-      });
-
-      describe("order", () => {
-        test("should return properties ordered ASC by default", async () => {
-          const { body } = await request(app).get(
-            "/api/properties?sort=price_per_night"
-          );
-          expect(body.properties).toBeSortedBy("price_per_night", {
-            coerce: true,
+            descending: true,
           });
         });
 
-        test("should return properties ordered DESC when passed any casing of desc", async () => {
+        //! HOW DO I SORT BY POPULARITY WITHOUT RETURNING IT?
+        test("should return properties sorted by popularity when passed as query or any other value (default)", async () => {
           const { body } = await request(app).get(
-            "/api/properties?sort=price_per_night&order=desc"
+            "/api/properties?sort=popularity"
           );
-          expect(body.properties).toBeSortedBy("price_per_night", {
+          console.log(body.properties);
+          expect(body.properties).toBeSortedBy("popularity", {
             coerce: true,
             descending: true,
           });
 
           const { body: secondBody } = await request(app).get(
-            "/api/properties?sort=price_per_night&order=Desc"
+            "/api/properties?sort=faultyval"
           );
-          expect(secondBody.properties).toBeSortedBy("price_per_night", {
+          expect(secondBody.properties).toBeSortedBy("popularity", {
             coerce: true,
             descending: true,
           });
+        });
+      });
+
+      describe("order", () => {
+        test("should return properties ordered DESC by default", async () => {
+          const { body } = await request(app).get(
+            "/api/properties?sort=price_per_night"
+          );
+          expect(body.properties).toBeSortedBy("price_per_night", {
+            coerce: true,
+            descending: true,
+          });
+        });
+
+        test("should return properties ordered ASC when passed any casing of asc", async () => {
+          const { body } = await request(app).get(
+            "/api/properties?sort=price_per_night&order=asc"
+          );
+          expect(body.properties).toBeSortedBy("price_per_night", {
+            coerce: true,
+          });
+
+          const { body: secondBody } = await request(app).get(
+            "/api/properties?sort=price_per_night&order=Asc"
+          );
+          expect(secondBody.properties).toBeSortedBy("price_per_night", {
+            coerce: true,
+          });
 
           const { body: thirdBody } = await request(app).get(
-            "/api/properties?sort=price_per_night&order=dESc"
+            "/api/properties?sort=price_per_night&order=aSc"
           );
           expect(thirdBody.properties).toBeSortedBy("price_per_night", {
             coerce: true,
-            descending: true,
           });
         });
       });
@@ -117,25 +136,40 @@ describe("app", () => {
         test("should return properties filtered by host or empty array if id hosts no properties", async () => {
           const { body } = await request(app).get("/api/properties?host=1");
           // Alice Johnson - id 1, hosts properties
-          if (body.properties.length > 0) {
-            expect(
-              body.properties.every(
-                (property) => property.host === "Alice Johnson"
-              )
-            ).toBeTrue();
-          } else expect(body.properties).toBeArrayOfSize(0);
+          expect(body.properties.length).toBeGreaterThanOrEqual(1);
+          expect(
+            body.properties.every(
+              (property) => property.host === "Alice Johnson"
+            )
+          ).toBeTrue();
 
           const { body: secondBody } = await request(app).get(
             "/api/properties?host=2"
           );
           // Bob Smith - id 2, does not host properties
-          if (secondBody.properties.length > 0) {
-            expect(
-              secondBody.properties.every(
-                (property) => property.host === undefined
-              )
-            ).toBeTrue();
-          } else expect(secondBody.properties).toBeArrayOfSize(0);
+          expect(secondBody.properties).toBeArrayOfSize(0);
+        });
+      });
+
+      describe("multi-query", () => {
+        test("should return expected data for complex multi-query GET", async () => {
+          const { body } = await request(app).get(
+            `/api/properties?host=3&sort=price_per_night&order=asc&minprice=90`
+          );
+
+          // Emma Davis - id 3, hosts properties, one is less than 90
+          expect(body.properties.length).toBeGreaterThanOrEqual(1);
+          expect(
+            body.properties.every((property) => property.host === "Emma Davis")
+          ).toBeTrue();
+
+          expect(body.properties).toBeSortedBy("price_per_night", {
+            coerce: true,
+          });
+
+          body.properties.forEach((property) => {
+            expect(Number(property.price_per_night)).toBeGreaterThanOrEqual(90);
+          });
         });
       });
     });
