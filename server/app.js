@@ -6,6 +6,7 @@ app.use(express.json());
 const {
   getProperties,
   getReviewsById,
+  getPropertyById,
 } = require("./controllers/properties.controllers");
 
 const {
@@ -16,6 +17,7 @@ const {
 
 app.get("/api/properties", getProperties);
 app.get("/api/properties/:id/reviews", getReviewsById);
+app.get("/api/properties/:id", getPropertyById);
 
 app.all("/", handlePathNotFound);
 

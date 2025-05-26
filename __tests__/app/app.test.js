@@ -20,6 +20,7 @@ describe("app", () => {
   });
 
   //! HOW TO HANDLE 400 AS BAD QUERIES ARE DEFAULTED
+
   describe("GET - /api/properties", () => {
     test("should return status 200", async () => {
       await request(app).get("/api/properties").expect(200);
@@ -219,7 +220,7 @@ describe("app", () => {
         });
       });
 
-      // I want to test sorting by created_at here but seed is all created_at same time?
+      //! I want to test sorting by created_at here but seed is all created_at same time?
 
       test(`returns with an avg_rating key, with correct avg`, async () => {
         // I've chosen to round to 1 decimal place
@@ -228,6 +229,103 @@ describe("app", () => {
         expect(body).toContainKey("average_rating");
         // Test seed data has two reviews for this property, averaging 3.5
         expect(body.average_rating).toBe(3.5);
+      });
+    });
+  });
+
+  describe("GET - /api/properties/:id", () => {
+    describe("status codes/errors", () => {
+      test("should return status 200 for good request without query", async () => {
+        await request(app).get("/api/properties/1").expect(200);
+      });
+
+      test("should return status 200 for good request with query", async () => {
+        await request(app).get("/api/properties/1?user_id=2").expect(200);
+      });
+
+      test(`returns with 404 and msg if property_id is not in db`, async () => {
+        const { body } = await request(app)
+          .get("/api/properties/1000?user_id=1")
+          .expect(404);
+
+        expect(body.msg).toBe("Data not found.");
+      });
+
+      test(`returns with 400 and msg if user_id query is not a number`, async () => {
+        const { body } = await request(app)
+          .get("/api/properties/1?user_id=imnotanumber")
+          .expect(400);
+
+        expect(body.msg).toBe("Bad request.");
+      });
+
+      test(`returns with 404 and msg if user_id is not in db`, async () => {
+        const { body } = await request(app)
+          .get("/api/properties/1?user_id=1000")
+          .expect(404);
+
+        expect(body.msg).toBe("Data not found.");
+      });
+
+      //! NEED TO CLARIFY GLOBAL ERROR HANDLING WITH UPDATED EXPRESS
+
+      describe("functionality", () => {});
+    });
+
+    describe("functionality", () => {
+      test(`returns with a single property object with expected keys 
+        when no user_id query passed`, async () => {
+        const validKeys = [
+          "property_id",
+          "property_name",
+          "location",
+          "description",
+          "price_per_night",
+          "host",
+          "host_avatar",
+          "favourite_count",
+        ];
+        const { body } = await request(app).get("/api/properties/1");
+
+        expect(body.property).toBeObject();
+        expect(body.property).toContainAllKeys(validKeys);
+      });
+
+      test(`returns with a single property object with expected keys 
+        when user_id query passed`, async () => {
+        const validKeys = [
+          "property_id",
+          "property_name",
+          "location",
+          "description",
+          "price_per_night",
+          "host",
+          "host_avatar",
+          "favourite_count",
+          "favourited",
+        ];
+        const { body } = await request(app).get("/api/properties/1?user_id=1");
+
+        expect(body.property).toBeObject();
+        expect(body.property).toContainAllKeys(validKeys);
+      });
+
+      test("should have host key with value of full name of host", async () => {
+        const { body } = await request(app).get("/api/properties/1?user_id=1");
+        // Test data is first_name = "Alice", surname = "Johnson"
+        expect(body.property.host).toBe("Alice Johnson");
+      });
+
+      test("should have favourited key reflect favourited status of property_id/user_id", async () => {
+        const { body } = await request(app).get("/api/properties/1?user_id=1");
+        // Alice Johnson is user_id 1 and in test data has not favourited property_id 1
+        expect(body.property.favourited).toBeFalse();
+
+        const { body: secondBody } = await request(app).get(
+          "/api/properties/1?user_id=2"
+        );
+        // Bob Smith is user_id 2 and in test data has favourited property_id 1
+        expect(secondBody.property.favourited).toBeTrue();
       });
     });
   });

@@ -78,3 +78,64 @@ exports.selectReviewsById = async (id) => {
 
   return [reviews, avgRating];
 };
+
+exports.selectPropertyById = async (id, userId) => {
+  const {
+    rows: [property],
+  } = await db.query(
+    `SELECT 
+     properties.property_id, 
+     properties.name AS property_name, 
+     properties.location, 
+     properties.price_per_night,
+     properties.description,
+     users.first_name,
+     users.surname,
+     users.avatar AS host_avatar,
+     COUNT(favourites.property_id) AS favourite_count
+     FROM properties
+     JOIN users ON properties.host_id = users.user_id
+     LEFT JOIN favourites ON favourites.property_id = properties.property_id
+     WHERE properties.property_id = $1
+     GROUP BY 
+     properties.property_id, 
+     properties.name, 
+     properties.location, 
+     properties.price_per_night, 
+     users.first_name, 
+     users.surname,
+     users.avatar;`,
+    [id]
+  );
+
+  if (property === undefined)
+    return Promise.reject({ status: 404, msg: "Data not found." });
+  property.host = `${property.first_name} ${property.surname}`;
+  delete property.first_name;
+  delete property.surname;
+
+  if (userId) {
+    const isUserIdNumber = Number.isNaN(Number(userId)) ? false : true;
+    if (!isUserIdNumber)
+      return Promise.reject({ status: 400, msg: "Bad request." });
+    let {
+      rows: [userIdInDb],
+    } = await db.query("SELECT * FROM users WHERE user_id = $1", [userId]);
+
+    userIdInDb = userIdInDb === undefined ? false : true;
+    if (!userIdInDb)
+      return Promise.reject({ status: 404, msg: "Data not found." });
+
+    let {
+      rows: [hasFaved],
+    } = await db.query(
+      `SELECT favourite_id
+      FROM favourites
+      WHERE property_id = $1
+      AND guest_id = $2;`,
+      [id, userId]
+    );
+    property.favourited = hasFaved === undefined ? false : true;
+    return property;
+  } else return property;
+};
