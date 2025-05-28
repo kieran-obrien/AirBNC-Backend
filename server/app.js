@@ -19,7 +19,7 @@ app.get("/api/properties", getProperties);
 app.get("/api/properties/:id/reviews", getReviewsById);
 app.get("/api/properties/:id", getPropertyById);
 
-app.all("/", handlePathNotFound);
+app.all("/*allbadpaths", handlePathNotFound);
 
 app.use(handleCustomErrors);
 app.use(handleBadRequest);

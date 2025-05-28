@@ -15,7 +15,7 @@ afterAll(() => {
 
 describe("app", () => {
   test("non-existent endpoint responds with 404 and msg", async () => {
-    const { body } = await request(app).get("/").expect(404);
+    const { body } = await request(app).get("/imnot/avalidpath").expect(404);
     expect(body.msg).toBe("Path not found.");
   });
 
