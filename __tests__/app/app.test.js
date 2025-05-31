@@ -19,8 +19,6 @@ describe("app", () => {
     expect(body.msg).toBe("Path not found.");
   });
 
-  //! HOW TO HANDLE 400 AS BAD QUERIES ARE DEFAULTED
-
   describe("GET - /api/properties", () => {
     test("should return status 200", async () => {
       await request(app).get("/api/properties").expect(200);
@@ -33,7 +31,7 @@ describe("app", () => {
         "location",
         "price_per_night",
         "host",
-        "popularity", //! TO FIX
+        "popularity",
       ];
       const { body } = await request(app).get("/api/properties");
 
@@ -53,6 +51,14 @@ describe("app", () => {
             expect(Number(property.price_per_night)).toBeLessThanOrEqual(100);
           });
         });
+
+        test(`returns with 400 and msg if maxprice query is not a number`, async () => {
+          const { body } = await request(app)
+            .get("/api/properties?maxprice=imnotanumber")
+            .expect(400);
+
+          expect(body.msg).toBe("Bad request, query data type invalid.");
+        });
       });
 
       describe("minprice", () => {
@@ -63,6 +69,14 @@ describe("app", () => {
           body.properties.forEach((property) => {
             expect(Number(property.price_per_night)).toBeGreaterThanOrEqual(90);
           });
+        });
+
+        test(`returns with 400 and msg if minprice query is not a number`, async () => {
+          const { body } = await request(app)
+            .get("/api/properties?minprice=imnotanumber")
+            .expect(400);
+
+          expect(body.msg).toBe("Bad request, query data type invalid.");
         });
       });
 
@@ -77,8 +91,7 @@ describe("app", () => {
           });
         });
 
-        //! HOW DO I SORT BY POPULARITY WITHOUT RETURNING IT?
-        test("should return properties sorted by popularity when passed as query or any other value (default)", async () => {
+        test("should return properties sorted by popularity when passed as query or as default", async () => {
           const { body } = await request(app).get(
             "/api/properties?sort=popularity"
           );
@@ -88,12 +101,20 @@ describe("app", () => {
           });
 
           const { body: secondBody } = await request(app).get(
-            "/api/properties?sort=faultyval"
+            "/api/properties"
           );
           expect(secondBody.properties).toBeSortedBy("popularity", {
             coerce: true,
             descending: true,
           });
+        });
+
+        test(`returns with 400 and msg if sort query is not a valid option`, async () => {
+          const { body } = await request(app)
+            .get("/api/properties?sort=imnotavalidoption")
+            .expect(400);
+
+          expect(body.msg).toBe("Bad request, query column invalid.");
         });
       });
 
@@ -130,10 +151,18 @@ describe("app", () => {
             coerce: true,
           });
         });
+
+        test(`returns with 400 and msg if sort query is not a valid option`, async () => {
+          const { body } = await request(app)
+            .get("/api/properties?sort=price_per_night&order=imnotavalidoption")
+            .expect(400);
+
+          expect(body.msg).toBe("Bad request, invalid sort order.");
+        });
       });
 
       describe("host", () => {
-        test("should return properties filtered by host or empty array if id hosts no properties", async () => {
+        test("should return properties filtered by host", async () => {
           const { body } = await request(app).get("/api/properties?host=1");
           // Alice Johnson - id 1, hosts properties
           expect(body.properties.length).toBeGreaterThanOrEqual(1);
@@ -142,12 +171,14 @@ describe("app", () => {
               (property) => property.host === "Alice Johnson"
             )
           ).toBeTrue();
+        });
 
-          const { body: secondBody } = await request(app).get(
-            "/api/properties?host=2"
-          );
-          // Bob Smith - id 2, does not host properties
-          expect(secondBody.properties).toBeArrayOfSize(0);
+        test(`returns with 400 and msg if host query is not a valid host_id`, async () => {
+          const { body } = await request(app)
+            .get("/api/properties?host=2")
+            .expect(404);
+          // Bob Smith, does not host properties
+          expect(body.msg).toBe("Data not found.");
         });
       });
 
@@ -188,16 +219,6 @@ describe("app", () => {
 
         expect(body.msg).toBe("Data not found.");
       });
-
-      //! NEED TO CLARIFY GLOBAL ERROR HANDLING WITH UPDATED EXPRESS
-      /*
-      test("should return status 400 for bad request", async () => {
-        const { body } = await request(app)
-          .get("/api/properties/1/rev")
-          .expect(400);
-        expect(body.msg).toBe("Path not found.");
-      });
-      */
     });
 
     describe("functionality", () => {
@@ -266,8 +287,6 @@ describe("app", () => {
 
         expect(body.msg).toBe("Data not found.");
       });
-
-      //! NEED TO CLARIFY GLOBAL ERROR HANDLING WITH UPDATED EXPRESS
 
       describe("functionality", () => {});
     });

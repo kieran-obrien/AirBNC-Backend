@@ -3,18 +3,34 @@ const db = require("../../db/connection");
 exports.selectProperties = async (
   maxprice = Infinity,
   minprice = 0,
-  sort,
+  sort = "popularity",
   order = "DESC",
   host
 ) => {
+  if (
+    (Number.isNaN(Number(maxprice)) && maxprice !== Infinity) ||
+    Number.isNaN(Number(minprice)) ||
+    (Number.isNaN(Number(host)) && host !== undefined)
+  )
+    return Promise.reject({
+      status: 400,
+      msg: "Bad request, query data type invalid.",
+    });
+
+  if (sort !== "price_per_night" && sort !== "popularity")
+    return Promise.reject({
+      status: 400,
+      msg: "Bad request, query column invalid.",
+    });
+
   const orders = ["ASC", "DESC"];
+  if (!orders.includes(order.toUpperCase()))
+    return Promise.reject({
+      status: 400,
+      msg: "Bad request, invalid sort order.",
+    });
 
-  const sortColumn = sort === "price_per_night" ? sort : "popularity"; // Will default to popularity, not location when faves done
-  const sortOrder = orders.includes(order.toUpperCase())
-    ? order.toUpperCase()
-    : "DESC";
-
-  const hostClause = Number.isNaN(Number(host)) ? "" : `AND host_id = ${host}`;
+  const hostClause = host === undefined ? "" : `AND host_id = ${host}`;
 
   const { rows: properties } = await db.query(
     `SELECT 
@@ -22,8 +38,7 @@ exports.selectProperties = async (
      properties.name AS property_name, 
      properties.location, 
      properties.price_per_night, 
-     users.first_name, 
-     users.surname,
+     CONCAT(users.first_name, ' ', users.surname) AS host,
      COUNT(favourites.property_id) AS popularity
    FROM properties
    JOIN users ON properties.host_id = users.user_id
@@ -37,16 +52,18 @@ exports.selectProperties = async (
      properties.price_per_night, 
      users.first_name, 
      users.surname
-   ORDER BY ${sortColumn} ${sortOrder};`,
+   ORDER BY ${sort} ${order};`,
     [minprice, maxprice]
   );
 
-  for (const property of properties) {
-    property.host = `${property.first_name} ${property.surname}`;
-    delete property.first_name;
-    delete property.surname;
+  if (host) {
+    let {
+      rows: [hostIdInDb],
+    } = await db.query("SELECT * FROM properties WHERE host_id = $1", [host]);
+    hostIdInDb = hostIdInDb === undefined ? false : true;
+    if (!hostIdInDb)
+      return Promise.reject({ status: 404, msg: "Data not found." });
   }
-
   return properties;
 };
 
@@ -110,6 +127,7 @@ exports.selectPropertyById = async (id, userId) => {
 
   if (property === undefined)
     return Promise.reject({ status: 404, msg: "Data not found." });
+
   property.host = `${property.first_name} ${property.surname}`;
   delete property.first_name;
   delete property.surname;
