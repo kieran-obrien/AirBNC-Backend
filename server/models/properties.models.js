@@ -67,35 +67,6 @@ exports.selectProperties = async (
   return properties;
 };
 
-exports.selectReviewsById = async (id) => {
-  const { rows: reviews } = await db.query(
-    `
-    SELECT reviews.review_id, reviews.comment, 
-    reviews.rating, reviews.created_at,
-    users.first_name, users.surname,
-    users.avatar AS guest_avatar
-    FROM reviews
-    JOIN users ON reviews.guest_id = users.user_id
-    WHERE reviews.property_id = $1
-    ORDER BY reviews.created_at DESC`,
-    [id]
-  );
-
-  if (Array.isArray(reviews) && reviews.length === 0)
-    return Promise.reject({ status: 404, msg: "Data not found." });
-
-  let avgRating = 0;
-  for (const review of reviews) {
-    review.guest = `${review.first_name} ${review.surname}`;
-    delete review.first_name;
-    delete review.surname;
-    avgRating += review.rating;
-  }
-  avgRating = Number((avgRating / reviews.length).toFixed(1));
-
-  return [reviews, avgRating];
-};
-
 exports.selectPropertyById = async (id, userId) => {
   const {
     rows: [property],
@@ -106,8 +77,7 @@ exports.selectPropertyById = async (id, userId) => {
      properties.location, 
      properties.price_per_night,
      properties.description,
-     users.first_name,
-     users.surname,
+     CONCAT(users.first_name, ' ', users.surname) AS host,
      users.avatar AS host_avatar,
      COUNT(favourites.property_id) AS favourite_count
      FROM properties
@@ -127,10 +97,6 @@ exports.selectPropertyById = async (id, userId) => {
 
   if (property === undefined)
     return Promise.reject({ status: 404, msg: "Data not found." });
-
-  property.host = `${property.first_name} ${property.surname}`;
-  delete property.first_name;
-  delete property.surname;
 
   if (userId) {
     const isUserIdNumber = Number.isNaN(Number(userId)) ? false : true;

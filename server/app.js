@@ -5,9 +5,13 @@ app.use(express.json());
 // Controllers/Middleware
 const {
   getProperties,
-  getReviewsById,
   getPropertyById,
 } = require("./controllers/properties.controllers");
+
+const {
+  getReviewsById,
+  postReviewById,
+} = require("./controllers/reviews.controllers");
 
 const {
   handlePathNotFound,
@@ -16,8 +20,10 @@ const {
 } = require("./controllers/errors.controllers");
 
 app.get("/api/properties", getProperties);
-app.get("/api/properties/:id/reviews", getReviewsById);
 app.get("/api/properties/:id", getPropertyById);
+
+app.get("/api/properties/:id/reviews", getReviewsById);
+app.post("/api/properties/:id/reviews", postReviewById);
 
 app.all("/*allbadpaths", handlePathNotFound);
 

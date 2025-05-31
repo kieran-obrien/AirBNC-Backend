@@ -20,16 +20,6 @@ exports.getProperties = async (req, res, next) => {
   }
 };
 
-exports.getReviewsById = async (req, res, next) => {
-  const { id } = req.params;
-  try {
-    const [reviews, average_rating] = await selectReviewsById(id);
-    res.status(200).send({ reviews, average_rating });
-  } catch (error) {
-    next(error);
-  }
-};
-
 exports.getPropertyById = async (req, res, next) => {
   const { id } = req.params;
   const { user_id: userId } = req.query;
