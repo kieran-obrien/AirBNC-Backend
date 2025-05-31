@@ -1,6 +1,7 @@
 const {
   selectReviewsById,
   insertReviewById,
+  validateReviewPayload,
 } = require("../models/reviews.models");
 
 exports.getReviewsById = async (req, res, next) => {
@@ -14,5 +15,11 @@ exports.getReviewsById = async (req, res, next) => {
 };
 
 exports.postReviewById = async (req, res, next) => {
-  return "hello";
+  try {
+    await validateReviewPayload(req.body);
+    const review = await insertReviewById(req.params.id, req.body);
+    res.status(201).send(review);
+  } catch (error) {
+    next(error);
+  }
 };

@@ -212,6 +212,14 @@ describe("app", () => {
         await request(app).get("/api/properties/1/reviews").expect(200);
       });
 
+      test(`returns with 400 and msg if property_id query is not a number`, async () => {
+        const { body } = await request(app)
+          .get("/api/properties/notanumber/reviews")
+          .expect(400);
+
+        expect(body.msg).toBe("Bad request.");
+      });
+
       test(`returns with 404 and msg if path structure valid but id not in db`, async () => {
         const { body } = await request(app)
           .get("/api/properties/100/reviews")
@@ -345,6 +353,81 @@ describe("app", () => {
         );
         // Bob Smith is user_id 2 and in test data has favourited property_id 1
         expect(secondBody.property.favourited).toBeTrue();
+      });
+    });
+  });
+
+  describe("POST - /api/properties/:id/reviews", () => {
+    describe("status codes/errors", () => {
+      test("should return status 200 when passed correct payload structure/content", async () => {
+        const { body } = await request(app)
+          .post("/api/properties/1/reviews")
+          .send({ guest_id: 1, rating: 3, comment: "Blah blah" })
+          .expect(201);
+      });
+
+      test(`returns with 404 and msg if property_id is not in db`, async () => {
+        const { body } = await request(app)
+          .post("/api/properties/1000/reviews")
+          .send({ guest_id: 1, rating: 3, comment: "Blah blah" })
+          .expect(404);
+
+        expect(body.msg).toBe("Data not found.");
+      });
+
+      test(`returns with 400 and msg if payload key structure incorrect`, async () => {
+        const { body } = await request(app)
+          .post("/api/properties/1000/reviews")
+          .send({ guest: 1, rating: 3, comment: "Blah blah" })
+          .expect(400);
+
+        expect(body.msg).toBe("Invalid payload.");
+      });
+
+      test(`returns with 400 and msg if payload key structure correct, but vals of wrong type`, async () => {
+        const { body } = await request(app)
+          .post("/api/properties/1/reviews")
+          .send({ guest_id: 1, rating: 3, comment: 100 })
+          .expect(400);
+
+        expect(body.msg).toBe("Invalid payload value data type.");
+      });
+
+      test(`returns with 400 and msg if property_id is not valid data type`, async () => {
+        const { body } = await request(app)
+          .post("/api/properties/number/reviews")
+          .send({ guest_id: 1, rating: 3, comment: "Blah blah" })
+          .expect(400);
+
+        expect(body.msg).toBe("Bad request, id must be number.");
+      });
+    });
+
+    describe("functionality", () => {
+      test("returns with a single posted review object, with correct keys/values", async () => {
+        const validKeys = [
+          "review_id",
+          "property_id",
+          "guest_id",
+          "rating",
+          "comment",
+          "created_at",
+        ];
+
+        const { body } = await request(app)
+          .post("/api/properties/1/reviews")
+          .send({ guest_id: 1, rating: 3, comment: "Blah blah" });
+
+        expect(body).toBeObject();
+        for (const key in body) {
+          expect(validKeys.includes(key)).toBeTrue();
+        }
+
+        expect(body.review_id).toBe(12);
+        expect(body.property_id).toBe(1);
+        expect(body.guest_id).toBe(1);
+        expect(body.rating).toBe(3);
+        expect(body.comment).toBe("Blah blah");
       });
     });
   });
