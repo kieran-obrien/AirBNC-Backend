@@ -19,11 +19,15 @@ const {
   handleCustomErrors,
 } = require("./controllers/errors.controllers");
 
+const { getUserById } = require("./controllers/users.controllers");
+
 app.get("/api/properties", getProperties);
 app.get("/api/properties/:id", getPropertyById);
 
 app.get("/api/properties/:id/reviews", getReviewsById);
 app.post("/api/properties/:id/reviews", postReviewById);
+
+app.get("/api/users/:id", getUserById);
 
 app.all("/*allbadpaths", handlePathNotFound);
 

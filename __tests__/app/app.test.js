@@ -206,62 +206,6 @@ describe("app", () => {
     });
   });
 
-  describe("GET - /api/properties/:id/reviews", () => {
-    describe("status codes/errors", () => {
-      test("should return status 200 for good request", async () => {
-        await request(app).get("/api/properties/1/reviews").expect(200);
-      });
-
-      test(`returns with 400 and msg if property_id query is not a number`, async () => {
-        const { body } = await request(app)
-          .get("/api/properties/notanumber/reviews")
-          .expect(400);
-
-        expect(body.msg).toBe("Bad request.");
-      });
-
-      test(`returns with 404 and msg if path structure valid but id not in db`, async () => {
-        const { body } = await request(app)
-          .get("/api/properties/100/reviews")
-          .expect(404);
-
-        expect(body.msg).toBe("Data not found.");
-      });
-    });
-
-    describe("functionality", () => {
-      test(`returns with an array of review objects with keys 
-      - review_id, comment, rating, created_at, guest, guest_avatar`, async () => {
-        const validKeys = [
-          "review_id",
-          "comment",
-          "rating",
-          "created_at",
-          "guest",
-          "guest_avatar",
-        ];
-        const { body } = await request(app).get("/api/properties/3/reviews");
-
-        expect(body.reviews).toBeArray();
-
-        body.reviews.forEach((review) => {
-          expect(review).toContainAllKeys(validKeys);
-        });
-      });
-
-      //! I want to test sorting by created_at here but seed is all created_at same time?
-
-      test(`returns with an avg_rating key, with correct avg`, async () => {
-        // I've chosen to round to 1 decimal place
-        const { body } = await request(app).get("/api/properties/3/reviews");
-
-        expect(body).toContainKey("average_rating");
-        // Test seed data has two reviews for this property, averaging 3.5
-        expect(body.average_rating).toBe(3.5);
-      });
-    });
-  });
-
   describe("GET - /api/properties/:id", () => {
     describe("status codes/errors", () => {
       test("should return status 200 for good request without query", async () => {
@@ -357,6 +301,62 @@ describe("app", () => {
     });
   });
 
+  describe("GET - /api/properties/:id/reviews", () => {
+    describe("status codes/errors", () => {
+      test("should return status 200 for good request", async () => {
+        await request(app).get("/api/properties/1/reviews").expect(200);
+      });
+
+      test(`returns with 400 and msg if property_id query is not a number`, async () => {
+        const { body } = await request(app)
+          .get("/api/properties/notanumber/reviews")
+          .expect(400);
+
+        expect(body.msg).toBe("Bad request.");
+      });
+
+      test(`returns with 404 and msg if path structure valid but id not in db`, async () => {
+        const { body } = await request(app)
+          .get("/api/properties/100/reviews")
+          .expect(404);
+
+        expect(body.msg).toBe("Data not found.");
+      });
+    });
+
+    describe("functionality", () => {
+      test(`returns with an array of review objects with keys 
+      - review_id, comment, rating, created_at, guest, guest_avatar`, async () => {
+        const validKeys = [
+          "review_id",
+          "comment",
+          "rating",
+          "created_at",
+          "guest",
+          "guest_avatar",
+        ];
+        const { body } = await request(app).get("/api/properties/3/reviews");
+
+        expect(body.reviews).toBeArray();
+
+        body.reviews.forEach((review) => {
+          expect(review).toContainAllKeys(validKeys);
+        });
+      });
+
+      //! I want to test sorting by created_at here but seed is all created_at same time?
+
+      test(`returns with an avg_rating key, with correct avg`, async () => {
+        // I've chosen to round to 1 decimal place
+        const { body } = await request(app).get("/api/properties/3/reviews");
+
+        expect(body).toContainKey("average_rating");
+        // Test seed data has two reviews for this property, averaging 3.5
+        expect(body.average_rating).toBe(3.5);
+      });
+    });
+  });
+
   describe("POST - /api/properties/:id/reviews", () => {
     describe("status codes/errors", () => {
       test("should return status 200 when passed correct payload structure/content", async () => {
@@ -428,6 +428,60 @@ describe("app", () => {
         expect(body.guest_id).toBe(1);
         expect(body.rating).toBe(3);
         expect(body.comment).toBe("Blah blah");
+      });
+    });
+  });
+
+  describe("GET - /api/users/:id", () => {
+    describe("status codes/errors", () => {
+      test("should return status 200 when passed correct id", async () => {
+        await request(app).get("/api/users/1/").expect(200);
+      });
+
+      test(`returns with 404 and msg if user_id is not in db`, async () => {
+        const { body } = await request(app).get("/api/users/1000").expect(404);
+
+        expect(body.msg).toBe("Data not found.");
+      });
+
+      test(`returns with 400 and msg if id is invalid data type`, async () => {
+        const { body } = await request(app)
+          .get("/api/users/notanumber")
+          .expect(400);
+
+        expect(body.msg).toBe("Invalid id data type.");
+      });
+    });
+
+    describe("functionality", () => {
+      test("returns with a single user object, with correct keys/values", async () => {
+        const validKeys = [
+          "user_id",
+          "first_name",
+          "surname",
+          "email",
+          "phone_number",
+          "is_host",
+          "avatar",
+          "created_at",
+        ];
+
+        const { body } = await request(app).get("/api/users/1");
+        const user = body.user;
+
+        expect(user).toBeObject();
+        for (const key in user) {
+          expect(validKeys.includes(key)).toBeTrue();
+        }
+
+        // Alice Johnson - User 1
+        expect(user.user_id).toBe(1);
+        expect(user.first_name).toBe("Alice");
+        expect(user.surname).toBe("Johnson");
+        expect(user.email).toBe("alice@example.com");
+        expect(user.phone_number).toBe("+44 7000 111111");
+        expect(user.is_host).toBe(true);
+        expect(user.avatar).toBe("https://example.com/images/alice.jpg");
       });
     });
   });
