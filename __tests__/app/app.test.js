@@ -485,4 +485,110 @@ describe("app", () => {
       });
     });
   });
+
+  describe("PATCH - /api/users/:id", () => {
+    describe("status codes/errors", () => {
+      test("should return status 200 when passed valid id/payload", async () => {
+        await request(app)
+          .patch("/api/users/1")
+          .send({ first_name: "John" })
+          .expect(200);
+      });
+
+      test(`returns with 400 and msg if payload not provided`, async () => {
+        const { body } = await request(app).patch("/api/users/1").expect(400);
+
+        expect(body.msg).toBe("Must provide payload.");
+      });
+
+      test(`returns with 400 and msg if payload is empty object`, async () => {
+        const { body } = await request(app)
+          .patch("/api/users/1")
+          .send({})
+          .expect(400);
+
+        expect(body.msg).toBe("Invalid payload.");
+      });
+
+      test(`returns with 400 and msg if payload key not valid`, async () => {
+        const { body } = await request(app)
+          .patch("/api/users/1")
+          .send({
+            wrong_key: "John",
+            email: "new@email.com",
+            phone_number: "123456789",
+          })
+          .expect(400);
+
+        expect(body.msg).toBe("Invalid payload.");
+      });
+
+      test(`returns with 400 and msg if payload value is invalid data type`, async () => {
+        const { body } = await request(app)
+          .patch("/api/users/1")
+          .send({
+            first_name: 1234,
+            email: "new@email.com",
+            phone_number: "123456789",
+          })
+          .expect(400);
+
+        expect(body.msg).toBe("Invalid payload value data type.");
+      });
+
+      test(`returns with 404 and msg if user_id is not in db`, async () => {
+        const { body } = await request(app)
+          .patch("/api/users/1000")
+          .send({ first_name: "John" })
+          .expect(404);
+
+        expect(body.msg).toBe("Data not found.");
+      });
+
+      test(`returns with 400 and msg if id is invalid data type`, async () => {
+        const { body } = await request(app)
+          .patch("/api/users/notanumber")
+          .send({ first_name: "John" })
+          .expect(400);
+
+        expect(body.msg).toBe("Invalid id data type.");
+      });
+    });
+
+    describe("functionality", () => {
+      test("returns with a single user object, with correct keys/values", async () => {
+        const validKeys = [
+          "user_id",
+          "first_name",
+          "surname",
+          "email",
+          "phone_number",
+          "is_host",
+          "avatar",
+          "created_at",
+        ];
+
+        const { body } = await request(app).patch("/api/users/1").send({
+          first_name: "John",
+          email: "new@email.com",
+          phone_number: "123456789",
+        });
+        const user = body.user;
+
+        expect(user).toBeObject();
+        for (const key in user) {
+          expect(validKeys.includes(key)).toBeTrue();
+        }
+
+        // Alice Johnson - User 1
+        expect(user.user_id).toBe(1);
+        expect(user.first_name).toBe("John");
+        expect(user.surname).toBe("Johnson");
+        expect(user.email).toBe("new@email.com");
+        expect(user.phone_number).toBe("123456789");
+        expect(user.is_host).toBeTrue();
+        expect(user.avatar).toBe("https://example.com/images/alice.jpg");
+      });
+    });
+  });
 });
