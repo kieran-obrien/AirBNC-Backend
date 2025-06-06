@@ -432,6 +432,38 @@ describe("app", () => {
     });
   });
 
+  describe("DELETE - /api/reviews/:id", () => {
+    describe("status codes/errors", () => {
+      test("should return status 204 for good request", async () => {
+        await request(app).delete("/api/reviews/1").expect(204);
+      });
+
+      test(`returns with 400 and msg if review_id param is not a number`, async () => {
+        const { body } = await request(app)
+          .delete("/api/reviews/notanumber")
+          .expect(400);
+
+        expect(body.msg).toBe("Bad request.");
+      });
+
+      test(`returns with 404 and msg if path structure valid but review_id not in db`, async () => {
+        const { body } = await request(app)
+          .delete("/api/reviews/1000")
+          .expect(404);
+
+        expect(body.msg).toBe("Data not found.");
+      });
+    });
+
+    describe("functionality", () => {
+      test(`successfully deletes review from database`, async () => {
+        await request(app).delete("/api/reviews/1");
+        const { rowCount } = await db.query("SELECT * FROM reviews;");
+        expect(rowCount).toBe(10);
+      });
+    });
+  });
+
   describe("GET - /api/users/:id", () => {
     describe("status codes/errors", () => {
       test("should return status 200 when passed correct id", async () => {

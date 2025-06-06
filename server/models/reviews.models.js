@@ -1,6 +1,10 @@
 const db = require("../../db/connection");
 
 exports.selectReviewsById = async (id) => {
+  const isPropIdNumber = Number.isNaN(Number(id)) ? false : true;
+  if (!isPropIdNumber)
+    return Promise.reject({ status: 400, msg: "Bad request." });
+
   const { rows: reviews } = await db.query(
     `
     SELECT reviews.review_id, reviews.comment, 
@@ -13,10 +17,6 @@ exports.selectReviewsById = async (id) => {
     ORDER BY reviews.created_at DESC`,
     [id]
   );
-
-  const isPropIdNumber = Number.isNaN(Number(id)) ? false : true;
-  if (!isPropIdNumber)
-    return Promise.reject({ status: 400, msg: "Bad request." });
 
   if (Array.isArray(reviews) && reviews.length === 0)
     return Promise.reject({ status: 404, msg: "Data not found." });
@@ -60,7 +60,10 @@ exports.insertReviewById = async (id, payload) => {
 
   const isPropIdNumber = Number.isNaN(Number(id)) ? false : true;
   if (!isPropIdNumber)
-    return Promise.reject({ status: 400, msg: "Bad request, id must be number." });
+    return Promise.reject({
+      status: 400,
+      msg: "Bad request, id must be number.",
+    });
 
   let {
     rows: [propIdInDb],
@@ -80,4 +83,20 @@ exports.insertReviewById = async (id, payload) => {
   );
 
   return review;
+};
+
+exports.deleteReview = async (id) => {
+  const isReviewIdNumber = Number.isNaN(Number(id)) ? false : true;
+  if (!isReviewIdNumber)
+    return Promise.reject({ status: 400, msg: "Bad request." });
+
+  const { rowCount } = await db.query(
+    `
+    DELETE FROM reviews
+    WHERE review_id = $1;
+    `,
+    [id]
+  );
+
+  if (!rowCount) return Promise.reject({ status: 404, msg: "Data not found." });
 };

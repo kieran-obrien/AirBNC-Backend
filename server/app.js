@@ -11,6 +11,7 @@ const {
 const {
   getReviewsById,
   postReviewById,
+  deleteReviewById,
 } = require("./controllers/reviews.controllers");
 
 const {
@@ -29,6 +30,7 @@ app.get("/api/properties/:id", getPropertyById);
 
 app.get("/api/properties/:id/reviews", getReviewsById);
 app.post("/api/properties/:id/reviews", postReviewById);
+app.delete("/api/reviews/:id", deleteReviewById);
 
 app.get("/api/users/:id", getUserById);
 app.patch("/api/users/:id", patchUserById);
@@ -39,3 +41,5 @@ app.use(handleCustomErrors);
 app.use(handleBadRequest);
 
 module.exports = app;
+
+// TODO - Refactor error handling to utilise psql error codes
