@@ -27,8 +27,8 @@ exports.postReviewById = async (req, res, next) => {
 
 exports.deleteReviewById = async (req, res, next) => {
   try {
-    const { id } = req.params;
-    await deleteReview(id);
+    const { propertyId, guestId } = req.params;
+    await deleteReview(propertyId, guestId);
     res.status(204).send();
   } catch (error) {
     next(error);

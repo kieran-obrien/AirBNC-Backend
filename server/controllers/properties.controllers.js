@@ -1,6 +1,5 @@
 const {
   selectProperties,
-  selectReviewsById,
   selectPropertyById,
 } = require("../models/properties.models");
 
