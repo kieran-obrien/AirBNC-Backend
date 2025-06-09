@@ -27,7 +27,7 @@ describe("Express App Tests", () => {
         await request(app).get("/api/properties").expect(200);
       });
       test(`returns with an array of property objects with keys 
-      - property_id, property_name, location, price_per_night, host`, async () => {
+      - property_id, property_name, location, price_per_night, host, image`, async () => {
         const validKeys = [
           "property_id",
           "property_name",
@@ -35,6 +35,7 @@ describe("Express App Tests", () => {
           "price_per_night",
           "host",
           "popularity",
+          "image",
         ];
         const { body } = await request(app).get("/api/properties");
 
@@ -42,6 +43,17 @@ describe("Express App Tests", () => {
         body.properties.forEach((property) => {
           expect(property).toContainAllKeys(validKeys);
         });
+      });
+
+      test("should return first image associated with each property", async () => {
+        const { body } = await request(app).get("/api/properties");
+
+        expect(body.properties[0].image).toBe(
+          "https://example.com/images/modern_apartment_1.jpg"
+        );
+        expect(body.properties[4].image).toBe(
+          "https://example.com/images/charming_studio_1.jpg"
+        );
       });
 
       describe("Queries", () => {

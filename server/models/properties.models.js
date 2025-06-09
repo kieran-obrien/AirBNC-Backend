@@ -34,25 +34,33 @@ exports.selectProperties = async (
 
   const { rows: properties } = await db.query(
     `SELECT 
-     properties.property_id, 
-     properties.name AS property_name, 
-     properties.location, 
-     properties.price_per_night, 
-     CONCAT(users.first_name, ' ', users.surname) AS host,
-     COUNT(favourites.property_id) AS popularity
-   FROM properties
-   JOIN users ON properties.host_id = users.user_id
-   LEFT JOIN favourites ON favourites.property_id = properties.property_id
-   WHERE properties.price_per_night BETWEEN $1 AND $2
-   ${hostClause}
-   GROUP BY 
-     properties.property_id, 
-     properties.name, 
-     properties.location, 
-     properties.price_per_night, 
-     users.first_name, 
-     users.surname
-   ORDER BY ${sort} ${order};`,
+  properties.property_id, 
+  properties.name AS property_name, 
+  properties.location, 
+  properties.price_per_night, 
+  CONCAT(users.first_name, ' ', users.surname) AS host,
+  COUNT(favourites.property_id) AS popularity,
+  img.image_url AS image
+  FROM properties
+  JOIN users ON properties.host_id = users.user_id
+  LEFT JOIN favourites ON favourites.property_id = properties.property_id
+  JOIN (
+  SELECT DISTINCT ON (property_id) property_id, image_url
+  FROM images
+  ORDER BY property_id, image_url ASC
+  ) AS img ON properties.property_id = img.property_id
+  WHERE properties.price_per_night BETWEEN $1 AND $2
+  ${hostClause}
+  GROUP BY 
+  properties.property_id, 
+  properties.name, 
+  properties.location, 
+  properties.price_per_night, 
+  users.first_name, 
+  users.surname, 
+  img.image_url
+  ORDER BY ${sort} ${order};
+`,
     [minprice, maxprice]
   );
 
