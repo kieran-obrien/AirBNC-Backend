@@ -565,21 +565,29 @@ describe("Express App Tests", () => {
       describe("status codes/errors", () => {
         test("should return status 204 for good request", async () => {
           await request(app)
-            .delete("/api/properties/:1/users/:guestId/favourite")
+            .delete("/api/properties/1/users/2/favourite")
             .expect(204);
         });
 
-        test(`returns with 400 and msg if review_id param is not a number`, async () => {
+        test(`returns with 400 and msg if property_id param is not a number`, async () => {
           const { body } = await request(app)
-            .delete("/api/reviews/notanumber")
+            .delete("/api/properties/notanumber/users/1/favourite")
             .expect(400);
 
           expect(body.msg).toBe("Bad request.");
-        }); 
+        });
 
-        test(`returns with 404 and msg if path structure valid but review_id not in db`, async () => {
+        test(`returns with 400 and msg if guest_id param is not a number`, async () => {
           const { body } = await request(app)
-            .delete("/api/reviews/1000")
+            .delete("/api/properties/1/users/notanumber/favourite")
+            .expect(400);
+
+          expect(body.msg).toBe("Bad request.");
+        });
+
+        test(`returns with 404 and msg if path structure valid but favourite with property_id/guest_id not in db`, async () => {
+          const { body } = await request(app)
+            .delete("/api/properties/1/users/1/favourite")
             .expect(404);
 
           expect(body.msg).toBe("Data not found.");
@@ -587,10 +595,17 @@ describe("Express App Tests", () => {
       });
 
       describe("functionality", () => {
-        test(`successfully deletes review from database`, async () => {
-          await request(app).delete("/api/reviews/1");
+        test(`successfully deletes favourite from database`, async () => {
+          await request(app).delete("/api/properties/1/users/2/favourite");
           const { rowCount } = await db.query("SELECT * FROM reviews;");
-          expect(rowCount).toBe(10);
+          expect(rowCount).toBe(11);
+
+          const { rowCount: favCheck } = await db.query(`
+            SELECT * FROM favourites
+            WHERE property_id = 1
+            AND guest_id = 2;
+            `);
+          expect(favCheck).toBe(0);
         });
       });
     });

@@ -41,6 +41,20 @@ exports.validateFavouritePayload = (payload) => {
   }
 };
 
-exports.deleteFavourite = async (id) => {
-  console.log(id);
+exports.deleteFavourite = async (propertyId, guestId) => {
+  const isPropertyIdNumber = Number.isNaN(Number(propertyId)) ? false : true;
+  const isGuestIdNumber = Number.isNaN(Number(guestId)) ? false : true;
+  if (!isPropertyIdNumber || !isGuestIdNumber)
+    return Promise.reject({ status: 400, msg: "Bad request." });
+
+  const { rowCount } = await db.query(
+    `
+    DELETE FROM favourites
+    WHERE property_id = $1
+    AND guest_id = $2;
+    `,
+    [propertyId, guestId]
+  );
+
+  if (!rowCount) return Promise.reject({ status: 404, msg: "Data not found." });
 };
