@@ -262,8 +262,6 @@ describe("Express App Tests", () => {
 
           expect(body.msg).toBe("Data not found.");
         });
-
-        describe("functionality", () => {});
       });
 
       describe("functionality", () => {
@@ -278,6 +276,7 @@ describe("Express App Tests", () => {
             "host",
             "host_avatar",
             "favourite_count",
+            "images",
           ];
           const { body } = await request(app).get("/api/properties/1");
 
@@ -297,6 +296,7 @@ describe("Express App Tests", () => {
             "host_avatar",
             "favourite_count",
             "favourited",
+            "images",
           ];
           const { body } = await request(app).get(
             "/api/properties/1?user_id=1"
@@ -326,6 +326,18 @@ describe("Express App Tests", () => {
           );
           // Bob Smith is user_id 2 and in test data has favourited property_id 1
           expect(secondBody.property.favourited).toBeTrue();
+        });
+
+        test("should return array of images associated with property", async () => {
+          const { body } = await request(app).get(
+            "/api/properties/1?user_id=2"
+          );
+
+          expect(body.property.images).toBeArray();
+          expect(body.property.images).toEqual([
+            "https://example.com/images/modern_apartment_1.jpg",
+            "https://example.com/images/modern_apartment_3.jpg",
+          ]);
         });
       });
     });
