@@ -17,8 +17,8 @@ exports.postFavouriteById = async (req, res, next) => {
 
 exports.deleteFavouriteById = async (req, res, next) => {
   try {
-    const { id } = req.params;
-    await deleteFavourite(id);
+    const { propertyId, guestId } = req.params;
+    await deleteFavourite(propertyId, guestId);
     res.status(204).send();
   } catch (error) {
     next(error);
