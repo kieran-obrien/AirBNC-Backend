@@ -16,3 +16,17 @@ const toggleLightMode = () => {
 
 const modeButton = document.getElementById("mode-button");
 modeButton.addEventListener("click", toggleLightMode);
+
+const menuItems = document.querySelectorAll(".menu-option");
+console.log(menuItems);
+
+const toggleBackgroundColour = (event) => {
+  menuItems.forEach((item) => {
+    item.classList.remove("bg-accent");
+  });
+  event.target.classList.add("bg-accent");
+};
+
+menuItems.forEach((item) => {
+  item.addEventListener("click", toggleBackgroundColour);
+});
