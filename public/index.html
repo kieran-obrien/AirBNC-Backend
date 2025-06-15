@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AirBNC - API Docs</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@5"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+
+  <body
+    class="bg-base-100 overflow-x-hidden h-full font-[Quicksand] font-medium"
+  >
+    <div class="navbar top-0 left-0 w-full bg-base-200 shadow-md h-16">
+      <div class="navbar-start">
+        <i class="ri-home-smile-line text-3xl ml-4 mr-3"></i>
+        <h1 class="text-xl">AirBNC - API</h1>
+      </div>
+      <div class="navbar-end mr-3">
+        <i class="btn ri-moon-fill text-xl" id="mode-button"></i>
+      </div>
+    </div>
+    <div class="flex min-h-screen mt-5 m-5">
+      <nav class="sticky top-0 h-fit w-64 shrink-0 bg-base-100 pt-5">
+        <ul class="menu bg-base-200 rounded-box w-full">
+          <li><a>About</a></li>
+          <li>
+            <details>
+              <summary>Endpoints</summary>
+              <ul>
+                <li class="ml-5">
+                  <details>
+                    <summary>Properties</summary>
+                    <ul>
+                      <li><a href="#test">GET</a></li>
+                      <li><a>POST</a></li>
+                      <li><a>PATCH</a></li>
+                    </ul>
+                  </details>
+                </li>
+                <li class="ml-5">
+                  <details>
+                    <summary>Reviews</summary>
+                    <ul>
+                      <li><a>GET</a></li>
+                      <li><a>POST</a></li>
+                      <li><a>PATCH</a></li>
+                    </ul>
+                  </details>
+                </li>
+                <li class="ml-5">
+                  <details>
+                    <summary>Users</summary>
+                    <ul>
+                      <li><a>GET</a></li>
+                      <li><a>POST</a></li>
+                      <li><a>PATCH</a></li>
+                    </ul>
+                  </details>
+                </li>
+                <li class="ml-5">
+                  <details>
+                    <summary>Favourites</summary>
+                    <ul>
+                      <li><a>GET</a></li>
+                      <li><a>POST</a></li>
+                      <li><a>PATCH</a></li>
+                    </ul>
+                  </details>
+                </li>
+              </ul>
+            </details>
+          </li>
+        </ul>
+      </nav>
+      <main class="flex-1 overflow-x-hidden pl-5 pt-5 bg-base-100">
+        <section class="bg-blue-400 p-5 rounded-md shadow">
+          <h1 class="text-3xl font-bold mb-4">TEST</h1>
+          <p class="mb-4">TEST CONTENT</p>
+          <div class="space-y-8">
+            <section>
+              <h2 class="text-2xl font-semibold mb-2">Section 1</h2>
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris
+                imperdiet fermentum eros, vitae feugiat urna.
+              </p>
+            </section>
+
+            <section>
+              <h2 class="text-2xl font-semibold mb-2">Section 2</h2>
+              <p>
+                Sed ut perspiciatis unde omnis iste natus error sit voluptatem
+                accusantium doloremque laudantium...
+              </p>
+            </section>
+
+            <section>
+              <h2 class="text-2xl font-semibold mb-2">Section 3</h2>
+              <p>
+                Aliquam erat volutpat. Integer porta nisi nec purus tincidunt,
+                vel dapibus lectus vehicula.
+              </p>
+            </section>
+
+            <section>
+              <h2 class="text-2xl font-semibold mb-2">Section 4</h2>
+              <p>
+                More scrolling content here to test layout behavior. Lorem ipsum
+                dolor sit amet, consectetur adipiscing elit.
+              </p>
+            </section>
+          </div>
+          <div class="space-y-8">
+            <section>
+              <h2 class="text-2xl font-semibold mb-2">Section 1</h2>
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris
+                imperdiet fermentum eros, vitae feugiat urna.
+              </p>
+            </section>
+
+            <section>
+              <h2 class="text-2xl font-semibold mb-2">Section 2</h2>
+              <p>
+                Sed ut perspiciatis unde omnis iste natus error sit voluptatem
+                accusantium doloremque laudantium...
+              </p>
+            </section>
+
+            <section>
+              <h2 class="text-2xl font-semibold mb-2">Section 3</h2>
+              <p>
+                Aliquam erat volutpat. Integer porta nisi nec purus tincidunt,
+                vel dapibus lectus vehicula.
+              </p>
+            </section>
+
+            <section>
+              <h2 class="text-2xl font-semibold mb-2">Section 4</h2>
+              <p>
+                More scrolling content here to test layout behavior. Lorem ipsum
+                dolor sit amet, consectetur adipiscing elit.
+              </p>
+            </section>
+          </div>
+          <div class="space-y-8">
+            <section>
+              <h2 class="text-2xl font-semibold mb-2">Section 1</h2>
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris
+                imperdiet fermentum eros, vitae feugiat urna.
+              </p>
+            </section>
+
+            <section>
+              <h2 class="text-2xl font-semibold mb-2">Section 2</h2>
+              <p>
+                Sed ut perspiciatis unde omnis iste natus error sit voluptatem
+                accusantium doloremque laudantium...
+              </p>
+            </section>
+
+            <section>
+              <h2 class="text-2xl font-semibold mb-2">Section 3</h2>
+              <p>
+                Aliquam erat volutpat. Integer porta nisi nec purus tincidunt,
+                vel dapibus lectus vehicula.
+              </p>
+            </section>
+
+            <section>
+              <h2 class="text-2xl font-semibold mb-2">Section 4</h2>
+              <p>
+                More scrolling content here to test layout behavior. Lorem ipsum
+                dolor sit amet, consectetur adipiscing elit.
+              </p>
+            </section>
+          </div>
+          <div class="space-y-8">
+            <section>
+              <h2 class="text-2xl font-semibold mb-2">Section 1</h2>
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris
+                imperdiet fermentum eros, vitae feugiat urna.
+              </p>
+            </section>
+
+            <section>
+              <h2 class="text-2xl font-semibold mb-2" id="test">Section 2</h2>
+              <p>
+                Sed ut perspiciatis unde omnis iste natus error sit voluptatem
+                accusantium doloremque laudantium...
+              </p>
+            </section>
+
+            <section>
+              <h2 class="text-2xl font-semibold mb-2">Section 3</h2>
+              <p>
+                Aliquam erat volutpat. Integer porta nisi nec purus tincidunt,
+                vel dapibus lectus vehicula.
+              </p>
+            </section>
+
+            <section>
+              <h2 class="text-2xl font-semibold mb-2">Section 4</h2>
+              <p>
+                More scrolling content here to test layout behavior. Lorem ipsum
+                dolor sit amet, consectetur adipiscing elit.
+              </p>
+            </section>
+          </div>
+        </section>
+      </main>
+    </div>
+  </body>
+  <script src="./main.js"></script>
+</html>
