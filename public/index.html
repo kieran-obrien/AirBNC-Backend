@@ -22,14 +22,13 @@
     />
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
-
   <body
     class="bg-base-100 overflow-x-hidden h-full font-[Quicksand] font-medium"
   >
     <div class="navbar top-0 left-0 w-full bg-base-200 shadow-md h-16">
       <div class="navbar-start">
         <i class="ri-home-smile-line text-3xl ml-4 mr-3"></i>
-        <h1 class="text-xl">AirBNC - API</h1>
+        <h1 class="text-xl">AirBNC - API Documentation</h1>
       </div>
       <div class="navbar-end mr-3">
         <i class="btn ri-moon-fill text-xl" id="mode-button"></i>
@@ -37,8 +36,8 @@
     </div>
     <div class="flex min-h-screen mt-5 m-5">
       <nav class="sticky top-0 h-fit w-64 shrink-0 bg-base-100 pt-5">
-        <ul class="menu bg-base-200 rounded-box w-full">
-          <li><a>About</a></li>
+        <ul class="menu bg-base-300 rounded-box w-full">
+          <li><a class="menu-option" href="#about">About</a></li>
           <li>
             <details>
               <summary>Endpoints</summary>
@@ -47,11 +46,14 @@
                   <details>
                     <summary>Properties</summary>
                     <ul>
-                      <li>
-                        <a href="#test" class="menu-option">GET</a>
+                      <li class="ml-5">
+                        <a href="#test" class="menu-option"
+                          >GET - Multiple Properties</a
+                        >
                       </li>
-                      <li><a class="menu-option">POST</a></li>
-                      <li><a class="menu-option">PATCH</a></li>
+                      <li class="ml-5">
+                        <a class="menu-option">GET - Single Property</a>
+                      </li>
                     </ul>
                   </details>
                 </li>
@@ -59,9 +61,15 @@
                   <details>
                     <summary>Reviews</summary>
                     <ul>
-                      <li><a>GET</a></li>
-                      <li><a>POST</a></li>
-                      <li><a>PATCH</a></li>
+                      <li class="ml-5">
+                        <a class="menu-option">GET - Review</a>
+                      </li>
+                      <li class="ml-5">
+                        <a class="menu-option">POST - Review</a>
+                      </li>
+                      <li class="ml-5">
+                        <a class="menu-option">DELETE - Review </a>
+                      </li>
                     </ul>
                   </details>
                 </li>
@@ -69,9 +77,12 @@
                   <details>
                     <summary>Users</summary>
                     <ul>
-                      <li><a>GET</a></li>
-                      <li><a>POST</a></li>
-                      <li><a>PATCH</a></li>
+                      <li class="ml-5">
+                        <a class="menu-option">GET - User</a>
+                      </li>
+                      <li class="ml-5">
+                        <a class="menu-option">PATCH - User Details</a>
+                      </li>
                     </ul>
                   </details>
                 </li>
@@ -79,9 +90,12 @@
                   <details>
                     <summary>Favourites</summary>
                     <ul>
-                      <li><a>GET</a></li>
-                      <li><a>POST</a></li>
-                      <li><a>PATCH</a></li>
+                      <li class="ml-5">
+                        <a class="menu-option">POST - Favourite</a>
+                      </li>
+                      <li class="ml-5">
+                        <a class="menu-option">DELETE - Favourite</a>
+                      </li>
                     </ul>
                   </details>
                 </li>
@@ -91,6 +105,32 @@
         </ul>
       </nav>
       <main class="flex-1 overflow-x-hidden pl-5 pt-5 bg-base-100">
+        <section class="bg-base-200 p-5 rounded-md mb-10">
+          <h1 class="text-3xl font-bold mb-4">About</h1>
+          <hr />
+          <div class="mt-5 space-y-8">
+            <section>
+              <h2 class="text-2xl font-semibold mb-2">Section 1</h2>
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris
+                imperdiet fermentum eros, vitae feugiat urna.
+              </p>
+            </section>
+          </div>
+        </section>
+        <section class="bg-base-200 p-5 rounded-md">
+          <h1 class="text-3xl font-bold mb-4">Endpoints</h1>
+          <hr />
+          <div class="mt-5 space-y-8">
+            <section>
+              <h2 class="text-2xl font-semibold mb-2">Overview</h2>
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris
+                imperdiet fermentum eros, vitae feugiat urna.
+              </p>
+            </section>
+          </div>
+        </section>
         <section class="bg-blue-400 p-5 rounded-md shadow">
           <h1 class="text-3xl font-bold mb-4">TEST</h1>
           <p class="mb-4">TEST CONTENT</p>
@@ -112,7 +152,7 @@
             </section>
 
             <section>
-              <h2 class="text-2xl font-semibold mb-2">Section 3</h2>
+              <h2 class="text-2xl font-semibold mb-2" id="about">Section 3</h2>
               <p>
                 Aliquam erat volutpat. Integer porta nisi nec purus tincidunt,
                 vel dapibus lectus vehicula.

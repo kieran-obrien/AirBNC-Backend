@@ -22,9 +22,9 @@ console.log(menuItems);
 
 const toggleBackgroundColour = (event) => {
   menuItems.forEach((item) => {
-    item.classList.remove("bg-accent");
+    item.classList.remove("bg-blue-400", "font-bold");
   });
-  event.target.classList.add("bg-accent");
+  event.target.classList.add("bg-blue-400", "font-bold");
 };
 
 menuItems.forEach((item) => {
