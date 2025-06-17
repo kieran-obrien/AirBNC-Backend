@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="h-full scroll-smooth">
+<html lang="en" class="h-full w-full scroll-smooth">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -20,22 +20,28 @@
       href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap"
       rel="stylesheet"
     />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
+      rel="stylesheet"
+    />
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
   <body
-    class="bg-base-100 overflow-x-hidden h-full font-[Quicksand] font-medium"
+    class="bg-base-100 overflow-x-hidden h-full font-[Quicksand] font-medium w-full"
   >
     <div class="navbar top-0 left-0 w-full bg-base-200 shadow-md h-16">
       <div class="navbar-start">
-        <i class="ri-home-smile-line text-3xl ml-4 mr-3"></i>
-        <h1 class="text-xl">AirBNC - API Documentation</h1>
+        <i class="ri-home-smile-line text-3xl p-4 sm:pl-14 pr-3"></i>
+        <h1 class="text-xl">AirBNC - API Documentation</h1> 
       </div>
-      <div class="navbar-end mr-3">
+      <div class="navbar-end pr-4 sm:pr-14">
         <i class="btn ri-moon-fill text-xl" id="mode-button"></i>
       </div>
     </div>
-    <div class="flex min-h-screen mt-5 m-5">
-      <nav class="sticky top-0 h-fit w-64 shrink-0 bg-base-100 pt-5">
+    <div class="flex flex-wrap min-h-screen pt-5 p-4 sm:p-16 w-full">
+      <nav
+        class="hidden sm:block sticky top-0 h-fit w-64 shrink-0 bg-base-100 pt-5"
+      >
         <ul class="menu bg-base-300 rounded-box w-full">
           <li><a class="menu-option" href="#about">About</a></li>
           <li>
@@ -43,16 +49,21 @@
               <summary>Endpoints</summary>
               <ul>
                 <li class="ml-5">
+                  <a href="#overview" class="menu-option">Overview</a>
+                </li>
+                <li class="ml-5">
                   <details>
                     <summary>Properties</summary>
                     <ul>
                       <li class="ml-5">
-                        <a href="#test" class="menu-option"
+                        <a href="#get-multiple-properties" class="menu-option"
                           >GET - Multiple Properties</a
                         >
                       </li>
                       <li class="ml-5">
-                        <a class="menu-option">GET - Single Property</a>
+                        <a href="#get-single-property" class="menu-option"
+                          >GET - Single Property</a
+                        >
                       </li>
                     </ul>
                   </details>
@@ -62,13 +73,19 @@
                     <summary>Reviews</summary>
                     <ul>
                       <li class="ml-5">
-                        <a class="menu-option">GET - Review</a>
+                        <a href="#get-review" class="menu-option"
+                          >GET - Reviews</a
+                        >
                       </li>
                       <li class="ml-5">
-                        <a class="menu-option">POST - Review</a>
+                        <a href="#post-review" class="menu-option"
+                          >POST - Review</a
+                        >
                       </li>
                       <li class="ml-5">
-                        <a class="menu-option">DELETE - Review </a>
+                        <a href="#delete-review" class="menu-option"
+                          >DELETE - Review
+                        </a>
                       </li>
                     </ul>
                   </details>
@@ -104,166 +121,203 @@
           </li>
         </ul>
       </nav>
-      <main class="flex-1 overflow-x-hidden pl-5 pt-5 bg-base-100">
-        <section class="bg-base-200 p-5 rounded-md mb-10">
-          <h1 class="text-3xl font-bold mb-4">About</h1>
+      <main class="flex-1 flex-wrap sm:pl-5 pt-5 bg-base-100 w-full">
+        <section id="about-section" class="bg-base-200 p-5 rounded-md mb-10">
+          <h1 id="about" class="text-3xl font-bold mb-4">About</h1>
           <hr />
-          <div class="mt-5 space-y-8">
+          <div class="mt-5 space-y-8 px-7">
             <section>
-              <h2 class="text-2xl font-semibold mb-2">Section 1</h2>
               <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris
-                imperdiet fermentum eros, vitae feugiat urna.
+                The AirBNC API is a RESTful API designed for interacting with
+                the AirBNC backend.
+              </p>
+              <br />
+              <p>
+                It provides structured access to core resources such as
+                properties, reviews, users, and favourites. Built following REST
+                conventions, this API allows the frontend application to
+                securely fetch, create, update, and delete data from the
+                database. It’s designed for reliability, scalability, and ease
+                of integration.
               </p>
             </section>
           </div>
         </section>
-        <section class="bg-base-200 p-5 rounded-md">
+        <section id="endpoints-section" class="bg-base-200 p-5 rounded-md">
           <h1 class="text-3xl font-bold mb-4">Endpoints</h1>
           <hr />
-          <div class="mt-5 space-y-8">
-            <section>
-              <h2 class="text-2xl font-semibold mb-2">Overview</h2>
+          <div id="main-endpoints-list" class="mt-5 space-y-8">
+            <section class="px-7">
+              <h2 id="overview" class="text-2xl font-semibold mb-2">
+                Overview
+              </h2>
+              <hr />
+              <p class="mt-5">
+                It provides structured access to core resources such as
+                properties, reviews, users, and favourites. Built following REST
+                conventions, this API allows the frontend application to
+                securely fetch, create, update, and delete data from the
+                database. It’s designed for reliability, scalability, and ease
+                of integration.
+              </p>
+            </section>
+            <section name="Properties" class="px-7">
+              <h2 class="text-2xl font-semibold mb-2">Properties</h2>
+              <hr />
+              <h3
+                id="get-multiple-properties"
+                class="text-xl font-semibold mt-8 mb-2"
+              >
+                <span class="bg-blue-400 rounded-lg p-1">GET</span> - Multiple
+                Properties
+              </h3>
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris
+                imperdiet fermentum eros, vitae feugiat urna.
+              </p>
+              <h3
+                id="get-single-property"
+                class="text-xl font-semibold mt-8 mb-2"
+              >
+                <span class="bg-blue-400 rounded-lg p-1">GET</span> - Single
+                Property
+              </h3>
               <p>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris
                 imperdiet fermentum eros, vitae feugiat urna.
               </p>
             </section>
-          </div>
-        </section>
-        <section class="bg-blue-400 p-5 rounded-md shadow">
-          <h1 class="text-3xl font-bold mb-4">TEST</h1>
-          <p class="mb-4">TEST CONTENT</p>
-          <div class="space-y-8">
-            <section>
-              <h2 class="text-2xl font-semibold mb-2">Section 1</h2>
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris
-                imperdiet fermentum eros, vitae feugiat urna.
-              </p>
-            </section>
-
-            <section>
-              <h2 class="text-2xl font-semibold mb-2">Section 2</h2>
-              <p>
-                Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-                accusantium doloremque laudantium...
-              </p>
-            </section>
-
-            <section>
-              <h2 class="text-2xl font-semibold mb-2" id="about">Section 3</h2>
-              <p>
-                Aliquam erat volutpat. Integer porta nisi nec purus tincidunt,
-                vel dapibus lectus vehicula.
-              </p>
-            </section>
-
-            <section>
-              <h2 class="text-2xl font-semibold mb-2">Section 4</h2>
-              <p>
-                More scrolling content here to test layout behavior. Lorem ipsum
-                dolor sit amet, consectetur adipiscing elit.
-              </p>
-            </section>
-          </div>
-          <div class="space-y-8">
-            <section>
-              <h2 class="text-2xl font-semibold mb-2">Section 1</h2>
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris
-                imperdiet fermentum eros, vitae feugiat urna.
-              </p>
-            </section>
-
-            <section>
-              <h2 class="text-2xl font-semibold mb-2">Section 2</h2>
-              <p>
-                Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-                accusantium doloremque laudantium...
-              </p>
-            </section>
-
-            <section>
-              <h2 class="text-2xl font-semibold mb-2">Section 3</h2>
-              <p>
-                Aliquam erat volutpat. Integer porta nisi nec purus tincidunt,
-                vel dapibus lectus vehicula.
-              </p>
-            </section>
-
-            <section>
-              <h2 class="text-2xl font-semibold mb-2">Section 4</h2>
-              <p>
-                More scrolling content here to test layout behavior. Lorem ipsum
-                dolor sit amet, consectetur adipiscing elit.
-              </p>
-            </section>
-          </div>
-          <div class="space-y-8">
-            <section>
-              <h2 class="text-2xl font-semibold mb-2">Section 1</h2>
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris
-                imperdiet fermentum eros, vitae feugiat urna.
-              </p>
-            </section>
-
-            <section>
-              <h2 class="text-2xl font-semibold mb-2">Section 2</h2>
-              <p>
-                Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-                accusantium doloremque laudantium...
-              </p>
-            </section>
-
-            <section>
-              <h2 class="text-2xl font-semibold mb-2">Section 3</h2>
-              <p>
-                Aliquam erat volutpat. Integer porta nisi nec purus tincidunt,
-                vel dapibus lectus vehicula.
-              </p>
-            </section>
-
-            <section>
-              <h2 class="text-2xl font-semibold mb-2">Section 4</h2>
-              <p>
-                More scrolling content here to test layout behavior. Lorem ipsum
-                dolor sit amet, consectetur adipiscing elit.
-              </p>
-            </section>
-          </div>
-          <div class="space-y-8">
-            <section>
-              <h2 class="text-2xl font-semibold mb-2">Section 1</h2>
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris
-                imperdiet fermentum eros, vitae feugiat urna.
-              </p>
-            </section>
-
-            <section>
-              <h2 class="text-2xl font-semibold mb-2" id="test">Section 2</h2>
-              <p>
-                Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-                accusantium doloremque laudantium...
-              </p>
-            </section>
-
-            <section>
-              <h2 class="text-2xl font-semibold mb-2">Section 3</h2>
-              <p>
-                Aliquam erat volutpat. Integer porta nisi nec purus tincidunt,
-                vel dapibus lectus vehicula.
-              </p>
-            </section>
-
-            <section>
-              <h2 class="text-2xl font-semibold mb-2">Section 4</h2>
-              <p>
-                More scrolling content here to test layout behavior. Lorem ipsum
-                dolor sit amet, consectetur adipiscing elit.
-              </p>
+            <section name="Reviews" class="px-7">
+              <h2 class="text-2xl font-semibold mb-2">Reviews</h2>
+              <hr />
+              <div name="GET - Reviews">
+                <h3 id="get-review" class="text-xl font-semibold mt-8 mb-2">
+                  <span class="bg-blue-400 rounded-lg p-1">GET</span> - Reviews
+                </h3>
+                <h4 class="text-lg mb-2 w-full break-all">
+                  https://airbnc-backend/api/properties/<span
+                    class="text-blue-400"
+                    >{propertyId}</span
+                  >/reviews
+                </h4>
+                <p class="mb-2">
+                  Fetches all reviews for a property, specified by it's
+                  <em>property id</em>.
+                </p>
+                <div class="flex items-center gap-2 justify-start mb-2">
+                  <h4 class="text-lg">Success -</h4>
+                  <i class="ri-emotion-line text-3xl text-success"></i>
+                  <p class="text-xl font-['IBM_Plex_Mono'] text-success">200</p>
+                </div>
+                <textarea
+                  readonly
+                  rows="14"
+                  class="font-['IBM_Plex_Mono'] mb-2 border border-blue-500 rounded-md p-2 w-full resize-none overflow-hidden bg-base-100"
+                >
+{
+  "reviews": [
+    {
+      "review_id": <id>,
+      "comment": <name>,
+      "rating": <location>,
+      "created_at": <date>,
+      "guest": <guest name>,
+      "guest_avatar" <img_url>
+    },
+    ...
+  ],
+  "average_rating": <avg of ratings>
+}
+</textarea
+                >
+              </div>
+              <div name="POST - Review">
+                <h3 id="post-review" class="text-xl font-semibold mt-8 mb-2">
+                  <span class="bg-blue-400 rounded-lg p-1">POST</span> - Review
+                </h3>
+                <h4 class="text-lg mb-2">
+                  https://airbnc-backend/api/properties/<span
+                    class="text-blue-400"
+                    >{propertyId}</span
+                  >/reviews
+                </h4>
+                <p class="mb-2">
+                  Posts a review for a property, specified by it's
+                  <em>property id</em>. Expects correct payload.
+                </p>
+                <div class="flex items-center gap-2 justify-start mb-2">
+                  <h4 class="text-lg">Expected Payload -</h4>
+                  <i class="ri-rocket-2-line text-3xl text-warning"></i>
+                </div>
+                <textarea
+                  readonly
+                  rows="5"
+                  class="font-['IBM_Plex_Mono'] mb-2 border border-blue-500 rounded-md p-2 w-full resize-none overflow-hidden bg-base-100"
+                >
+{
+    "guest_id": <id>,
+    "rating": <rating>,
+    "comment": <comment>
+}
+</textarea
+                >
+                <div class="flex items-center gap-2 justify-start mb-2">
+                  <h4 class="text-lg">Success -</h4>
+                  <i class="ri-emotion-line text-3xl text-success"></i>
+                  <p class="text-xl font-['IBM_Plex_Mono'] text-success">201</p>
+                </div>
+                <textarea
+                  readonly
+                  rows="14"
+                  class="font-['IBM_Plex_Mono'] mb-2 border border-blue-500 rounded-md p-2 w-full resize-none overflow-hidden bg-base-100"
+                >
+{
+  "reviews": [
+    {
+      "review_id": <id>,
+      "comment": <name>,
+      "rating": <location>,
+      "created_at": <date>,
+      "guest": <guest name>,
+      "guest_avatar" <img_url>
+    },
+    ...
+  ],
+  "average_rating": <avg of ratings>
+}
+</textarea
+                >
+              </div>
+              <div name="DELETE - Review">
+                <h3 id="delete-review" class="text-xl font-semibold mt-8 mb-2">
+                  <span class="bg-blue-400 rounded-lg p-1">DELETE</span> -
+                  Review
+                </h3>
+                <h4 class="text-lg mb-2">
+                  https://airbnc-backend/api/reviews/<span class="text-blue-400"
+                    >{reviewId}</span
+                  >
+                </h4>
+                <p class="mb-2">
+                  Deletes a review for a property, specified by it's
+                  <em>review id</em>.
+                </p>
+                <div class="flex items-center gap-2 justify-start mb-2">
+                  <h4 class="text-lg">Success -</h4>
+                  <i class="ri-emotion-line text-3xl text-success"></i>
+                  <p class="text-xl font-['IBM_Plex_Mono'] text-success">204</p>
+                </div>
+                <textarea
+                  readonly
+                  rows="3"
+                  class="font-['IBM_Plex_Mono'] mb-2 border border-blue-500 rounded-md p-2 w-full resize-none overflow-hidden bg-base-100"
+                >
+{
+    no body
+}
+</textarea
+                >
+              </div>
             </section>
           </div>
         </section>
@@ -271,7 +325,7 @@
     </div>
     <footer class="flex flex-col justify-center">
       <hr class="mx-5" />
-      <p class="mt-2 mb-4 text-xs text-center">
+      <p class="mt-2 mb-4 text-md sm:text-sm text-center">
         © 2025 Kieran O'Brien |
         <a href="https://kieranobrien.dev" class="hover:text-blue-400"
           >kieranobrien.dev</a
