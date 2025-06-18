@@ -30,3 +30,9 @@ const toggleBackgroundColour = (event) => {
 menuItems.forEach((item) => {
   item.addEventListener("click", toggleBackgroundColour);
 });
+
+const getEndpointTester = () => {};
+
+const testerButton = document.getElementById("tester-button");
+const testerInput = document.getElementById("tester-input");
+testerButton.addEventListener("click", getEndpointTester);
