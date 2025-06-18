@@ -18,7 +18,6 @@ const modeButton = document.getElementById("mode-button");
 modeButton.addEventListener("click", toggleLightMode);
 
 const menuItems = document.querySelectorAll(".menu-option");
-console.log(menuItems);
 
 const toggleBackgroundColour = (event) => {
   menuItems.forEach((item) => {
@@ -31,8 +30,21 @@ menuItems.forEach((item) => {
   item.addEventListener("click", toggleBackgroundColour);
 });
 
-const getEndpointTester = () => {};
+const getEndpointTester = async (e) => {
+  e.preventDefault();
+  resultTextArea.innerText = "";
+  const endpoint = "http://localhost:8888/api/" + testerInput.value;
+  try {
+    const res = await fetch(endpoint);
+    const data = await res.json();
+    console.log(data);
+    resultTextArea.value = JSON.stringify(data, null, 2);
+  } catch (err) {
+    console.log(err);
+  }
+};
 
 const testerButton = document.getElementById("tester-button");
 const testerInput = document.getElementById("tester-input");
+const resultTextArea = document.getElementById("endpoint-result");
 testerButton.addEventListener("click", getEndpointTester);

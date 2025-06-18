@@ -29,19 +29,19 @@
   <body
     class="bg-base-100 overflow-x-hidden h-full font-[Quicksand] font-medium w-full"
   >
-    <div class="navbar top-0 left-0 w-full bg-base-200 shadow-md h-16">
-      <div class="navbar-start">
+    <nav class="navbar top-0 left-0 w-full bg-base-200 shadow-md h-16">
+      <nav class="navbar-start">
         <i class="ri-home-smile-line text-3xl p-4 sm:pl-14 pr-3"></i>
         <h1 class="text-xl">AirBNC - API Documentation</h1>
-      </div>
-      <div class="navbar-end gap-1 pr-4 sm:pr-14">
+      </nav>
+      <nav class="navbar-end gap-1 pr-4 sm:pr-14">
         <a href="https://github.com/kieran-obrien/AirBNC"
           ><i class="btn ri-github-fill text-xl"></i
         ></a>
         <i class="btn ri-moon-fill text-xl" id="mode-button"></i>
-      </div>
-    </div>
-    <div class="flex flex-wrap min-h-screen pt-5 p-4 sm:p-16 w-full">
+      </nav>
+    </nav>
+    <main class="flex flex-wrap min-h-screen pt-5 p-4 sm:p-16 w-full">
       <nav
         class="hidden sm:block sticky top-0 h-fit w-64 shrink-0 bg-base-100 pt-5"
       >
@@ -124,9 +124,10 @@
               </ul>
             </details>
           </li>
+          <li><a class="menu-option" href="#try-it-out">Try It Out</a></li>
         </ul>
       </nav>
-      <main class="flex-1 flex-wrap sm:pl-5 pt-5 bg-base-100 w-full">
+      <section class="flex-1 flex-wrap sm:pl-5 pt-5 bg-base-100 w-full">
         <section id="about-section" class="bg-base-200 p-5 rounded-md mb-10">
           <h1 id="about" class="text-3xl font-bold mb-4">About</h1>
           <hr />
@@ -148,7 +149,10 @@
             </section>
           </div>
         </section>
-        <section id="endpoints-section" class="bg-base-200 p-5 rounded-md">
+        <section
+          id="endpoints-section"
+          class="bg-base-200 p-5 rounded-md mb-10"
+        >
           <h1 class="text-3xl font-bold mb-4">Endpoints</h1>
           <hr />
           <div id="main-endpoints-list" class="mt-5 space-y-8">
@@ -158,12 +162,15 @@
               </h2>
               <hr />
               <p class="mt-5">
-                It provides structured access to core resources such as
-                properties, reviews, users, and favourites. Built following REST
-                conventions, this API allows the frontend application to
-                securely fetch, create, update, and delete data from the
-                database. It’s designed for reliability, scalability, and ease
-                of integration.
+                The following endpoints provide structured access to key
+                resources within the AirBNC platform, including properties,
+                reviews, users, and favourites. Each endpoint follows RESTful
+                conventions and supports standard HTTP methods for interacting
+                with the backend service. These routes are designed to allow the
+                frontend to fetch, create, update, and delete data securely and
+                efficiently. All responses are returned in JSON format, and
+                appropriate status codes are used to indicate success or
+                failure.
               </p>
             </section>
             <section name="Properties" class="px-7">
@@ -224,7 +231,7 @@
     {
       "review_id": <id>,
       "comment": <name>,
-      "rating": <location>,
+      "rating": <rating>,
       "created_at": <date>,
       "guest": <guest name>,
       "guest_avatar" <img_url>
@@ -281,7 +288,7 @@
     {
       "review_id": <id>,
       "comment": <name>,
-      "rating": <location>,
+      "rating": <rating>,
       "created_at": <date>,
       "guest": <guest name>,
       "guest_avatar" <img_url>
@@ -422,16 +429,133 @@
                 >
               </div>
             </section>
+            <section name="Favourites" class="px-7">
+              <h2 class="text-2xl font-semibold mb-2">Favourites</h2>
+              <hr />
+              <div name="POST - Favourite">
+                <h3 id="get-user" class="text-xl font-semibold mt-8 mb-2">
+                  <span class="bg-blue-400 rounded-lg p-1">POST</span> -
+                  Favourite
+                </h3>
+                <h4 class="text-lg mb-2 w-full break-all">
+                  https://airbnc-backend/api/properties/<span
+                    class="text-blue-400"
+                    >{propertyId}</span
+                  >/favourite
+                </h4>
+                <p class="mb-2">
+                  Posts a user favourite for a property, specified by the
+                  <em>property id</em>. Expects payload of <em>guest id</em>.
+                </p>
+                <div class="flex items-center gap-2 justify-start mb-2">
+                  <h4 class="text-lg">Expected Payload -</h4>
+                  <i class="ri-rocket-2-line text-3xl text-warning"></i>
+                </div>
+                <textarea
+                  readonly
+                  rows="3"
+                  class="font-['IBM_Plex_Mono'] mb-2 border border-blue-500 rounded-md p-2 w-full resize-none lg:overflow-hidden bg-base-100"
+                >
+{
+    "guest_id": <id>
+}
+</textarea
+                >
+                <div class="flex items-center gap-2 justify-start mb-2">
+                  <h4 class="text-lg">Success -</h4>
+                  <i class="ri-emotion-line text-3xl text-success"></i>
+                  <p class="text-xl font-['IBM_Plex_Mono'] text-success">201</p>
+                </div>
+                <textarea
+                  readonly
+                  rows="4"
+                  class="font-['IBM_Plex_Mono'] mb-2 border border-blue-500 rounded-md p-2 w-full resize-none lg:overflow-hidden bg-base-100"
+                >
+{
+    "msg": "Property favourited successfully.",
+    "favorite_id": <id>
+}
+</textarea
+                >
+              </div>
+              <div name="DELETE - Favourite">
+                <h3 id="patch-user" class="text-xl font-semibold mt-8 mb-2">
+                  <span class="bg-blue-400 rounded-lg p-1">DELETE</span> -
+                  Favourite
+                </h3>
+                <h4 class="text-lg mb-2 break-all">
+                  https://airbnc-backend/api/properties/<span
+                    class="text-blue-400"
+                    >{propertyId}</span
+                  >/users/<span class="text-blue-400">{userId}</span>/favourite
+                </h4>
+                <p class="mb-2">
+                  Deletes a users' favourite for a specified property, requires
+                  both a <em>property id</em> and a <em>user id</em>.
+                </p>
+                <div class="flex items-center gap-2 justify-start mb-2">
+                  <h4 class="text-lg">Success -</h4>
+                  <i class="ri-emotion-line text-3xl text-success"></i>
+                  <p class="text-xl font-['IBM_Plex_Mono'] text-success">204</p>
+                </div>
+                <textarea
+                  readonly
+                  rows="3"
+                  class="font-['IBM_Plex_Mono'] mb-2 border border-blue-500 rounded-md p-2 w-full resize-none lg:overflow-hidden bg-base-100"
+                >
+{
+     no body
+}
+</textarea
+                >
+              </div>
+            </section>
           </div>
         </section>
-      </main>
-    </div>
-    <div>
-      <form class="bg-blue-400" id="get-tester">
-        <input id="tester-input" class="bg-green-400" type="text" />
-        <button id="tester-button" class="btn bg-red-400">HELLO</button>
-      </form>
-    </div>
+        <section id="try-it-out" class="bg-base-200 p-5 rounded-md">
+          <h1 class="text-3xl font-bold mb-4">Try It Out</h1>
+          <hr />
+          <div
+            name="Endpoint Tester"
+            class="bg-base-200 p-5 rounded-md mb-10 px-7 pt-8"
+          >
+            <p class="mt-5">
+              Use the GET Tester below to manually query any public GET endpoint
+              on the AirBNC API. Simply enter a valid endpoint URL and view the
+              formatted JSON response directly in the browser. This tool is
+              intended for quick testing and exploration of available data.
+            </p>
+            <form
+              class="flex flex-col justify-center items-center space-y-5 my-5"
+              id="get-tester"
+            >
+              <div
+                class="flex space-x-1 justify-center items-center align-center"
+              >
+                <p class="bg-blue-400 rounded-lg p-1">GET</p>
+                <p>http://airbnc-backend/api/</p>
+                <input
+                  id="tester-input"
+                  class="bg-base-100 w-50 border rounded-lg"
+                  type="text"
+                />
+              </div>
+              <i
+                id="tester-button"
+                class="btn bg-blue-400 hover:bg-blue-200 ri-send-plane-fill text-xl text-fg"
+              ></i>
+            </form>
+            <textarea
+              placeholder="Result will be displayed here..."
+              id="endpoint-result"
+              readonly
+              rows="12"
+              class="font-['IBM_Plex_Mono'] mb-2 border border-blue-500 rounded-md p-2 w-full resize-none bg-base-100"
+            ></textarea>
+          </div>
+        </section>
+      </section>
+    </main>
     <footer class="flex flex-col justify-center">
       <hr class="mx-5" />
       <p class="mt-2 mb-4 text-sm text-center">
