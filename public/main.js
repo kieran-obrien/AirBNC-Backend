@@ -46,5 +46,7 @@ const getEndpointTester = async (e) => {
 
 const testerButton = document.getElementById("tester-button");
 const testerInput = document.getElementById("tester-input");
+const testerForm = document.getElementById("get-tester");
 const resultTextArea = document.getElementById("endpoint-result");
 testerButton.addEventListener("click", getEndpointTester);
+testerForm.addEventListener("submit", getEndpointTester);
