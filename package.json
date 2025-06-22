@@ -10,7 +10,8 @@
     "test-utils": "jest utils --verbose",
     "create-test-db": "psql -f ./db/data/test/create-db.sql",
     "create-dev-db": "psql -f ./db/data/dev/create-db.sql",
-    "seed-db": "node ./db/seed-run"
+    "seed-db": "node ./db/seed-run",
+    "seed-prod": "NODE_ENV=prod node ./db/seed-run"
   },
   "repository": {
     "type": "git",
