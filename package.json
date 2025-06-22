@@ -2,7 +2,7 @@
   "name": "airbnc",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./server/listen.js",
   "type": "commonjs",
   "scripts": {
     "dev": "nodemon ./server/listen.js",
@@ -11,7 +11,8 @@
     "create-test-db": "psql -f ./db/data/test/create-db.sql",
     "create-dev-db": "psql -f ./db/data/dev/create-db.sql",
     "seed-db": "node ./db/seed-run",
-    "seed-prod": "NODE_ENV=prod node ./db/seed-run"
+    "seed-prod": "NODE_ENV=prod node ./db/seed-run",
+    "start": "node ./server/listen.js"
   },
   "repository": {
     "type": "git",
