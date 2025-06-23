@@ -33,11 +33,11 @@ menuItems.forEach((item) => {
 const getEndpointTester = async (e) => {
   e.preventDefault();
   resultTextArea.innerText = "";
-  const endpoint = "http://localhost:8888/api/" + testerInput.value;
+  const endpoint =
+    "https://airbnc-backend.kieranobrien.dev/api/" + testerInput.value;
   try {
     const res = await fetch(endpoint);
     const data = await res.json();
-    console.log(data);
     resultTextArea.value = JSON.stringify(data, null, 2);
   } catch (err) {
     console.log(err);
