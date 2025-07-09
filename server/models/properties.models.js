@@ -47,7 +47,7 @@ exports.selectProperties = async (
   JOIN (
   SELECT DISTINCT ON (property_id) property_id, image_url
   FROM images
-  ORDER BY property_id, image_url ASC
+  ORDER BY property_id, image_id ASC
   ) AS img ON properties.property_id = img.property_id
   WHERE properties.price_per_night BETWEEN $1 AND $2
   ${hostClause}
