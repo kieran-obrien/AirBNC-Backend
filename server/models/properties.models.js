@@ -88,7 +88,7 @@ exports.selectPropertyById = async (id, userId) => {
      CONCAT(users.first_name, ' ', users.surname) AS host,
      users.avatar AS host_avatar,
      COUNT(DISTINCT favourites.favourite_id) AS favourite_count,
-     array_agg(DISTINCT images.image_url) AS images
+     array_agg(images.image_url ORDER BY images.image_id ASC) AS images
      FROM properties
      JOIN users ON properties.host_id = users.user_id
      LEFT JOIN favourites ON favourites.property_id = properties.property_id
